@@ -49,6 +49,9 @@ class Motor():
             self.pulse_low = self.pulse_width - self.pulse_high
             self.enabled = True
 
+            # THIS IS ONLY TEMPORARY
+            self.a_enabled = True
+
             print("Pulse Width: {}\nPulse High: {}\nPulse Low: {}\n".format(self.pulse_width, self.pulse_high, self.pulse_low))
 
     def get_speed(self):
