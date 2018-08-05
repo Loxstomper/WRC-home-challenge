@@ -32,29 +32,22 @@ left_motor_t = Motor.Motor_Thread(left_motor)
 right_motor = Motor.Motor(35, 37, 26)
 right_motor_t = Motor.Motor_Thread(right_motor)
 
-#wheels = Wheels.Wheels(left_motor, right_motor)
+wheels = Wheels.Wheels(left_motor, right_motor)
 
 
 
 
-#robot = Robot.Robot(wheels)
+robot = Robot.Robot(wheels)
 
-#c_t = Control_Thread(robot)
+c_t = Control_Thread(robot)
 
 # start threads
-#c_t.start()
+c_t.start()
 left_motor_t.start()
-#right_motor_t.start()
+right_motor_t.start()
 
 # join the control thread
-#c_t.join()
-left_motor_t.join()
-
-left_motor.enabled = True
-left_motor.a_enabled = True
-
-left_motor.set_speed(100)
-sleep(20)
+c_t.join()
 
 
 
