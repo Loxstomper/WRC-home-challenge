@@ -26,17 +26,17 @@ class Control_Thread(threading.Thread):
 
 
 left_motor = Motor.Motor(31, 33, 24)
-left_motor_t = Motor.Motor_Thread(m1)
+left_motor_t = Motor.Motor_Thread(left_motor)
 
 right_motor = Motor.Motor(35, 37, 26)
-right_motor_t = Motor.Motor_Thread(m2)
+right_motor_t = Motor.Motor_Thread(right_motor)
 
 wheels = Wheels.Wheels(left_motor, right_motor)
 
 
 robot = Robot.Robot(wheels)
 
-c_t = Control_Thread(m1)
+c_t = Control_Thread(robot)
 
 # start threads
 c_t.start()
