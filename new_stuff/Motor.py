@@ -44,6 +44,8 @@ class Motor():
             self.pulse_low = self.pulse_width - self.pulse_high
             self.enabled = True
 
+            print("Pulse Width: {}\nPulse High: {}\nPulse Low: {}\n".format(self.pulse_width, self.pulse_high, self.pulse_low))
+
 
     def set_a(self, state):
         self.a_enabled = state
