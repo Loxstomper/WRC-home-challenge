@@ -27,6 +27,29 @@ class Motor():
 
         self.speed = 0
 
+    def set_speed(self, speed):
+        # can play with this threshold
+        if speed < 0:
+            self.enabled = False
+        else:
+            self.speed = -speed + 255
+            self.enabled = True
+
+
+    def set_a(self, state):
+        self.a_enabled = state
+
+    def set_b(self, state):
+        self.b_enabled = state
+
+    def get_a(self):
+        return self.a_enabled
+
+    def get_b(self):
+        return self.b_enabled
+
+
+
 
 
 class Motor_Thread(threading.Thread):
@@ -60,8 +83,7 @@ class Motor_Thread(threading.Thread):
             # speed control
             if self.motor.enabled:
                 GPIO.output(self.motor.enable_pin, GPIO.HIGH)
-                time.sleep(0.01)
-                #sleep(self.motor.speed / 100)
+                sleep(self.motor.speed / 255)
                 GPIO.output(self.motor.enable_pin, GPIO.LOW)
-                #sleep(self.motor.speed / 100)
+                sleep(self.motor.speed / 255)
                 time.sleep(0.01)

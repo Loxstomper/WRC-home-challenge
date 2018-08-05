@@ -10,13 +10,9 @@ class Control_Thread(threading.Thread):
     def run(self):
         y = int(input("Speed: "))
 
-        while y >= 0:
-            if y == 1:
-               self.motor.enabled = True
-            else:
-               self.motor.enabled = False 
+        while True:
+            self.motor.set_speed(y)
             y = int(input("Speed: "))
-
 
 
 
