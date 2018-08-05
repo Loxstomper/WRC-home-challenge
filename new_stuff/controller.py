@@ -7,6 +7,9 @@ from time import sleep
 
 
 class Control_Thread(threading.Thread):
+    '''
+    Simple controller which takes user inputs, controls robots movements
+    '''
     def __init__(self, robot):
         threading.Thread.__init__(self)
         self.robot = robot

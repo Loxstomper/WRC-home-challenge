@@ -5,6 +5,10 @@ import RPi.GPIO as GPIO
 # figure out reverse, maybe -speed
 
 class Motor():
+    '''
+    Stores information about the motor, and sets up the pins.
+    Pin 'a' and 'b' are 'in1' and 'in2' on the H-Bridge, 'enable' is the 'EN' pin
+    '''
     def __init__(self, a, b, enable):
         # pins
         self.a_pin      = a
@@ -36,6 +40,9 @@ class Motor():
         self.pulse_low = 0
 
     def set_speed(self, speed):
+        '''
+        Speeds of -100 to 100, negative being reverse
+        '''
         # should really clamp the speed from 0...100
 
         # can play with this threshold
@@ -83,6 +90,9 @@ class Motor():
 
 
 class Motor_Thread(threading.Thread):
+    '''
+    Thread for the motor, emulates PWM to control it
+    '''
     def __init__(self, motor):
         threading.Thread.__init__(self)
         self.motor = motor

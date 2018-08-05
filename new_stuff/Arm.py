@@ -6,6 +6,9 @@ from time import sleep
 # maybe use encoders instead
 
 class Arm():
+    '''
+    Wrapper around 3 motors, a, b, and a claw
+    '''
     def __init__(self, a, b, claw):
         # motors
         self.a = a

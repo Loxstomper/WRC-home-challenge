@@ -142,6 +142,7 @@ def setup(rate, sensor_values):
     # x.start()
     # x.join()
 
+    # i think this should be removed, but idk
     for thread in threads:
         thread.join()
 

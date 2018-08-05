@@ -4,6 +4,9 @@ from time import sleep
 
 # need to decide if I still want each motor to have a thread or should its container
 class Wheels():
+    '''
+    A wrapper around two motors
+    '''
     def __init__(self, left, right):
         self.left = left
         self.right = right

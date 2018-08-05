@@ -4,6 +4,10 @@ import Motor
 import Wheels
 
 class Robot():
+    '''
+    Wrapper around the whole system.
+    The Robot object is interacted with which in turn interacts with the sub components
+    '''
     # will be arm and sensors too
     def __init__(self, wheels, sensor_vals):
         self.wheels = wheels 
