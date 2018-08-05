@@ -11,10 +11,14 @@ class Control_Thread(threading.Thread):
         self.robot = robot
 
     def run(self):
-        print("DIR = {F, R, L, R}")
+        print("DIR = {F, R, L, R} or 'D' for sensor values")
 
         while True:
             z = input("DIR SPEED TIME").split()
+
+            if z[0A == 'D']:
+                print(self.robot.get_sensor_vals())
+                continue
 
             if z[0] == 'F':
                 self.robot.move_forward(int(z[1]), int(z[2]))
