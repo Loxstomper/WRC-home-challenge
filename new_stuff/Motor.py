@@ -2,6 +2,8 @@ import threading
 from time import sleep
 import RPi.GPIO as GPIO
 
+# figure out reverse, maybe -speed
+
 class Motor():
     def __init__(self, a, b, enable):
         # pins
@@ -27,6 +29,8 @@ class Motor():
 
         # speed settings
         self.speed = 0
+        # decrease this value to have smoother motion
+        # need to test how long we can make this with threading
         self.pulse_width = 0.1 # 0.1 second
         self.pulse_high = 0
         self.pulse_low = 0
@@ -47,6 +51,8 @@ class Motor():
 
             print("Pulse Width: {}\nPulse High: {}\nPulse Low: {}\n".format(self.pulse_width, self.pulse_high, self.pulse_low))
 
+    def get_speed(self):
+        return self.speed
 
     def set_a(self, state):
         self.a_enabled = state
@@ -60,6 +66,12 @@ class Motor():
     def get_b(self):
         return self.b_enabled
 
+    def set_state(self, state):
+        self.enabled = state
+
+    def get_state(self):
+        return self.enabled
+
 
 class Motor_Thread(threading.Thread):
     def __init__(self, motor):
@@ -72,6 +84,7 @@ class Motor_Thread(threading.Thread):
 
         while True:
             # update the A/B pins
+            # would be nicer to put this in the motor class
             if self.motor.a_enabled:
                 GPIO.output(self.motor.a_pin, GPIO.HIGH)
             else:
