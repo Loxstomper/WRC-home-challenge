@@ -94,4 +94,3 @@ class Motor_Thread(threading.Thread):
                 sleep(self.motor.pulse_high)
                 GPIO.output(self.motor.enable_pin, GPIO.LOW)
                 sleep(self.motor.pulse_low)
-                time.sleep(0.01)
