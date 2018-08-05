@@ -2,6 +2,7 @@ import Motor
 import Wheels
 import Robot
 import threading
+import Ultrasonic_sensors
 from time import sleep
 
 
@@ -16,7 +17,7 @@ class Control_Thread(threading.Thread):
         while True:
             z = input("DIR SPEED TIME").split()
 
-            if z[0A == 'D']:
+            if z[0] == 'D':
                 print(self.robot.get_sensor_vals())
                 continue
 
@@ -40,7 +41,8 @@ wheels = Wheels.Wheels(left_motor, right_motor)
 
 
 sensor_values = dict()
-Ultrasonic_sensors.setup(sensor_values)
+rate = 1
+Ultrasonic_sensors.setup(1, sensor_values)
 
 
 
