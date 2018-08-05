@@ -35,9 +35,12 @@ right_motor_t = Motor.Motor_Thread(right_motor)
 wheels = Wheels.Wheels(left_motor, right_motor)
 
 
+sensor_values = dict()
+Ultrasonic_sensors.setup(sensor_values)
 
 
-robot = Robot.Robot(wheels)
+
+robot = Robot.Robot(wheels, sensor_values)
 
 c_t = Control_Thread(robot)
 
