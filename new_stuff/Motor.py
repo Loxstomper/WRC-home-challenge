@@ -39,18 +39,24 @@ class Motor():
         # should really clamp the speed from 0...100
 
         # can play with this threshold
-        if speed < 0:
+        if speed == 0:
             self.enabled = False
         else:
+            # refactor this SOON!
+            if speed < 0:
+                self.a_enabled = True
+                self.b_enabled = False
+                speed = -speed
+            else:
+                self.a_enabled = False
+                self.b_enabled = True
+
             self.speed = speed
             # calculates percentage then gets the actual value
             self.pulse_high = (speed / 100) * self.pulse_width
             # check for precision
             self.pulse_low = self.pulse_width - self.pulse_high
             self.enabled = True
-
-            # THIS IS ONLY TEMPORARY
-            self.a_enabled = True
 
             print("Pulse Width: {}\nPulse High: {}\nPulse Low: {}\n".format(self.pulse_width, self.pulse_high, self.pulse_low))
 

@@ -31,8 +31,14 @@ class Wheels():
         sleep(duration)
 
         self.left.set_state(False)
-        self.left.set_state(True)
+        self.right.set_state(True)
 
     # figure out what im going to do here
     def reverse(self, speed, duration):
-        pass
+        self.left.set_speed(speed)
+        self.right.set_speed(speed)
+
+        sleep(duration)
+
+        self.left.set_state(False)
+        self.right.set_state(False)
