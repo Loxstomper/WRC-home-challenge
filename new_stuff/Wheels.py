@@ -8,7 +8,7 @@ class Wheels():
         self.left = left
         self.right = right
 
-    def left(self, speed, duration):
+    def turn_left(self, speed, duration):
         # enable right motor, disable left
         self.right.set_speed(speed)
         self.left.set_state(False)
@@ -16,7 +16,7 @@ class Wheels():
         sleep(duration)
         self.right.set_state(False)
 
-    def right(self, speed, duration):
+    def turn_right(self, speed, duration):
         # enable right motor, disable left
         self.left.set_speed(speed)
         self.right.set_state(False)

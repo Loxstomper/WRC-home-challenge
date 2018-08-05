@@ -15,9 +15,9 @@ class Robot():
         pass
 
     def turn_left(self, speed, duration):
-        self.wheels.left(speed, duration)
+        self.wheels.turn_left(speed, duration)
 
     def turn_right(self, speed, duration):
-        self.wheels.right(speed, duration)
+        self.wheels.turn_right(speed, duration)
 
 
