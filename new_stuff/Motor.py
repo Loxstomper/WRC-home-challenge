@@ -25,14 +25,23 @@ class Motor():
         self.b_enabled = False
         self.enabled   = False
 
+        # speed settings
         self.speed = 0
+        self.pulse_width = 0.1 # 0.1 second
+        self.pulse_high = 0
+        self.pulse_low = 0
 
     def set_speed(self, speed):
+        # should really clamp the speed from 0...100
+
         # can play with this threshold
         if speed < 0:
             self.enabled = False
         else:
-            self.speed = -speed + 255
+            self.speed = speed
+            self.pulse_high = speed / self.pulse_width
+            # check for precision
+            self.pulse_low = self.pulse_width - self.pulse_high
             self.enabled = True
 
 
@@ -47,9 +56,6 @@ class Motor():
 
     def get_b(self):
         return self.b_enabled
-
-
-
 
 
 class Motor_Thread(threading.Thread):
@@ -83,7 +89,7 @@ class Motor_Thread(threading.Thread):
             # speed control
             if self.motor.enabled:
                 GPIO.output(self.motor.enable_pin, GPIO.HIGH)
-                sleep(self.motor.speed / 255)
+                sleep(self.motor.pulse_high)
                 GPIO.output(self.motor.enable_pin, GPIO.LOW)
-                sleep(self.motor.speed / 255)
+                sleep(self.motor.pulse_low)
                 time.sleep(0.01)
