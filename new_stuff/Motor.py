@@ -39,7 +39,8 @@ class Motor():
             self.enabled = False
         else:
             self.speed = speed
-            self.pulse_high = speed / self.pulse_width
+            # calculates percentage then gets the actual value
+            self.pulse_high = (speed / 100) * self.pulse_width
             # check for precision
             self.pulse_low = self.pulse_width - self.pulse_high
             self.enabled = True
