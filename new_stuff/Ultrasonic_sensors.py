@@ -94,7 +94,7 @@ class Main_Thread(threading.Thread):
 
 
 # Globals
-sensor_info = dict()
+# sensor_info = dict()
 # hopefully this dictionary wont be a problem with the GIL, this is more convient to use but can be changed
 #sensor_values = dict()
 
@@ -137,10 +137,10 @@ def setup(rate, sensor_values):
     except Error as e:
         print("Error: unable to start threads\n", e)
 
-    x = Main_Thread(sensor_values)
-    print("Starting threads")
-    x.start()
-    x.join()
+    # x = Main_Thread(sensor_values)
+    # print("Starting threads")
+    # x.start()
+    # x.join()
 
     for thread in threads:
         thread.join()

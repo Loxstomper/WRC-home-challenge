@@ -42,9 +42,7 @@ wheels = Wheels.Wheels(left_motor, right_motor)
 
 sensor_values = dict()
 rate = 1
-Ultrasonic_sensors.setup(1, sensor_values)
-
-
+Ultrasonic_sensors.setup(rate, sensor_values)
 
 robot = Robot.Robot(wheels, sensor_values)
 
