@@ -26,6 +26,7 @@ class Ultrasonic_Sensor():
         print("\nInitializing Ultrasonic Sensor \n{}".format(self.get_info()))
 
         # setup the sr04 ultrasonic sensor
+        print("TRIG: ", self.trig)
         GPIO.setup(self.trig, GPIO.OUT)
         GPIO.setup(self.echo, GPIO.IN)
         GPIO.output(self.trig, GPIO.LOW)
@@ -124,6 +125,7 @@ def setup(rate, sensor_values):
 
     print("Setting up sensors\n")
     for sensor in sensor_info:
+        print(sensor)
         trig, echo, threshold = sensor_info[sensor]
         # this is serial... slow startup time, oh well..
         sensors.append(Ultrasonic_Sensor(sensor, trig, echo, threshold))
@@ -137,15 +139,21 @@ def setup(rate, sensor_values):
     except Error as e:
         print("Error: unable to start threads\n", e)
 
-    # x = Main_Thread(sensor_values)
-    # print("Starting threads")
-    # x.start()
-    # x.join()
+    #x = Main_Thread(sensor_values)
+    print("Starting threads")
+    #x.start()
+    #x.join()
 
     # i think this should be removed, but idk
-    for thread in threads:
-        thread.join()
+    #for thread in threads:
+        #thread.join()
+
+    return threads
+
+
+
 
 
 if __name__ == "__main__":
-    setup(4)
+    z = dict()
+    setup(1, z)

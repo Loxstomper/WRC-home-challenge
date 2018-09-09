@@ -18,7 +18,7 @@ class Control_Thread(threading.Thread):
         print("DIR = {F, R, L, R} or 'D' for sensor values")
 
         while True:
-            z = input("DIR SPEED TIME").split()
+            z = input("DIR SPEED TIME: ").split()
 
             if z[0] == 'D':
                 print(self.robot.get_sensor_vals())
