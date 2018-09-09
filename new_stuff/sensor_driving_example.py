@@ -64,6 +64,6 @@ print("CREATED sensors")
 robot = Robot.Robot(wheels, sensor_values)
 print("Created robot")
 
-y = Follow(robot)
+y = Drive(robot)
 #z = Follow_Thread(y)
-y.follow()
+y.do_stuff()
