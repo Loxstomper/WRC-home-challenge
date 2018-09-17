@@ -8,6 +8,14 @@ class Robot():
     Wrapper around the whole system.
     The Robot object is interacted with which in turn interacts with the sub components
     '''
+
+    '''
+
+    NEED TO DO SENSOR CHECKS HERE SO DONT CRASH
+
+    '''
+
+
     # will be arm and sensors too
     def __init__(self, wheels, sensor_vals):
         self.wheels = wheels 

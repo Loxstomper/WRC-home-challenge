@@ -32,6 +32,10 @@ class Vision():
 
         ret, frame = self.webcam.read()
 
+        # frame wasnt capture, frame=None
+        if not frame:
+            return
+
         # probably need to rezie the frame
         frame = imutils.resize(frame, width=600)
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)
@@ -70,9 +74,6 @@ class Vision():
                     (0, 255, 255), 2)
                 cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
-    # print(center)
-    
-
         # update the points queue
         pts.appendleft(center)
 
@@ -80,29 +81,52 @@ class Vision():
 
         # straight ahead
         if center is not None and center[0] in range(self.screen_mid[0] - self.thresholds[0], self.screen_mid[0] + self.thresholds[1]):
-            print("FORWRD")
-            self.colour_pos = 0
+            # print("FORWRD")
+            # self.colour_pos = 0
+            return 0
 
         elif center is not None and center[0] in range(0, self.screen_mid[0] - self.thresholds[0]):
             print("TURN RIGHT")
-            self.colour_pos = 1 
+            # self.colour_pos = 1 
+            return 1
 
         elif center is not None and center[0] in range(self.screen_mid[0] + self.thresholds[0], self.width):
             print("TURN LEFT")
-            self.colour_pos = -1 
+            # self.colour_pos = -1 
+            return -1
         
         else:
             print("CANT FIND TURNING LEFT")
-            self.colour_pos = -2
+            # self.colour_pos = -2
+            return -2
 
 
 class Vision_Thread(threading.Thread):
-    def __init__(self, vis):
+    def __init__(self, vis, robot):
         threading.Thread.__init__(self)
         self.vis = vis
+        self.robot = robot
 
     def run(self):
-        self.vis.do_stuff()
+        while True:
+            direction = self.vis.do_stuff()
+
+            if direction == 0:
+                print("Object is in front")
+                self.robot.move_forward(100, 1)
+                
+            elif direction == 1:
+                print("Object is at right")
+                self.robot.turn_right(100, 1)
+
+            elif direction == -1:
+                print("Object is at left")
+                self.robot.turn_left(100, 1)
+
+            elif direction == -2:
+                print("Couldnt find object turning left")
+                self.robot.turn_left(100, 1)
+                
 
 
 class Logic_Thread(threading.Thread):
@@ -135,5 +159,5 @@ print("Created robot")
 
 colour_pos = 0
 v = Vision(colour_pos)
-v_t = Vision_Thread(v)
+v_t = Vision_Thread(v, robot)
 v_t.start()
