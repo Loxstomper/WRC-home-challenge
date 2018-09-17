@@ -126,6 +126,8 @@ class Vision_Thread(threading.Thread):
             elif direction == -2:
                 print("Couldnt find object turning left")
                 self.robot.turn_left(100, 1)
+
+            sleep(1)
                 
 
 
@@ -160,4 +162,8 @@ print("Created robot")
 colour_pos = 0
 v = Vision(colour_pos)
 v_t = Vision_Thread(v, robot)
+
+left_motor_t.start()
+right_motor_t.start()
+
 v_t.start()
