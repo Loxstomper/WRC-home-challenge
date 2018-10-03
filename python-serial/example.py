@@ -1,4 +1,5 @@
 import serial
+from time import sleep
 
 ser = serial.Serial('/dev/ttyACM2')
 print(ser)
@@ -23,14 +24,17 @@ def get_sensor(sensor, name):
     message = "GET:{0}:{1}"
 
     ser.write((message.format(sensor, name)).encode())
+    sleep(1)
 
-    if sensor == "us":
-        return float(ser.readline().decode())
-    else:
-        return int(ser.readline().decode())
+    x = ser.readline().decode()
 
+    print(x)
 
+    if sensor == "US":
+        # print()
+        pass
 
+    return int(ser.readline().decode())
 
 
 ultrasonic_sensors = {
@@ -39,19 +43,36 @@ ultrasonic_sensors = {
         "right": 0
         }
 
-colour_sensor = {
+colour_sensors = {
         "left": 0,
         "center": 0,
         "right": 0
         }
 
+print("JUST A DEMO OF HOW THE PYTHON PROGRAM CAN INTERACT WITH THE ARDUINO\n\n\n");
+
 while True:
-    user_input = input("> ")
+    print("Colour sensors");
 
-    forward(int(user_input))
+    # colour_sensors["left"] = get_sensor("CS", "left")
+    # colour_sensors["left"] = get_sensor("CS", "center")
+    # colour_sensors["left"] = get_sensor("CS", "right")
+    # ser.write(input().encode())
+    # print(ser.readline().decode())
 
-    print(ser.readline().decode())
+    get_sensor("CS", "left")
 
+    print(colour_sensors)
+
+    print("Ultrasonic sensors");
+
+    # ultrasonic_sensors["left"] = get_sensor("US", "left")
+    # ultrasonic_sensors["left"] = get_sensor("US", "center")
+    # ultrasonic_sensors["left"] = get_sensor("US", "right")
+
+    print(ultrasonic_sensors)
+
+    print("\n")
 
 
 

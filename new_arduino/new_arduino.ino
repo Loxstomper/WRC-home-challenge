@@ -152,6 +152,7 @@ void poll_cs()
 void poll_us()
 {
     static int i;
+    static int duration;
 
     for (i = 0; i < NUMBER_US; i ++)
     {
@@ -163,7 +164,9 @@ void poll_us()
         delayMicroseconds(10);
         digitalWrite(us[i].trig, LOW);
 
-        us[i].value = (pulseIn(us[i].echo, HIGH)) * 0.034/2;
+        /* us[i].value = (pulseIn(us[i].echo, HIGH)) * 0.034/2; */
+        duration = pulseIn(us[i].echo, HIGH);
+        us[i].value = (duration / 2) / 29.1;
     }
 }
 
@@ -174,7 +177,7 @@ float get_us(char* name)
 
     for (i = 0; i < NUMBER_US; i ++)
     {
-        if (strcmp(us[i].name, name) == 0)
+        if ((strcmp(us[i].name, name)) == 0)
         {
             return us[i].value;
         }
@@ -190,7 +193,7 @@ int get_cs(char* name)
 
     for (i = 0; i < NUMBER_CS; i ++)
     {
-        if (strcmp(cs[i].name, name) == 0)
+        if ((strcmp(cs[i].name, name)) == 0)
         {
             return cs[i].value;
         }
@@ -280,8 +283,8 @@ void get_args()
     /* probably dont need to conserve the buffer */
     /* strcpy(temp, buffer); */
 
-    Serial.print("SOURCE: ");
-    Serial.println(buffer);
+    /* Serial.print("SOURCE: "); */
+    /* Serial.println(buffer); */
 
     arg = strtok(buffer, ":");
 
