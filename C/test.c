@@ -5,6 +5,7 @@
 
 #define NUMBER_US 3
 #define NUMBER_CS 3
+#define NUMBER_MOTORS 5
 
 struct Ultrasonic_Sensor
 {
@@ -26,6 +27,7 @@ struct Colour_Sensor
 struct Motor
 {
     char* name;
+    int enable;
     int a;
     int b;
     int value;
@@ -60,15 +62,32 @@ Colour_Sensor cs[] = {
                          };
 
 Motor motors[] = {
-                          {"left", 1, 2, 0},
-                          {"right", 7, 8, 0},
-                          {"first", 1, 2, 0},
-                          {"second", 1, 2, 0},
-                          {"claw", 1, 2, 0}
+                          {"left", 5, 1, 2, 0},
+                          {"right", 6, 7, 8, 0},
+                          {"first", 7, 1, 2, 0},
+                          {"second", 8, 1, 2, 0},
+                          {"claw", 9, 1, 2, 0}
                          };
 
 Wheels wheels;
 Arm arm;
+
+void setup_pins()
+{
+    /* iterate over motors */
+    /* iterate over colour sensors */
+    /* interate over ultrasonic sensors */
+}
+
+void setup_motors()
+{
+    for (int i = 0; i < NUMBER_MOTORS; i ++)
+    {
+        // digital write a and b to be 0
+        motors[i].value = 0
+        /* analogWrite(motors[i].enable,motors[i].value); */
+    }
+}
 
 
 void print_cs()
@@ -167,6 +186,13 @@ void raise_arm()
 void set_motor()
 {
 
+}
+
+void move_forward(int speed)
+{
+    /* make a and b high for both motors */
+
+    /* analogwrite on the pins */
 }
 
 
