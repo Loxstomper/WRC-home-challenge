@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #define NUMBER_US 3
 #define NUMBER_CS 3
@@ -20,7 +21,31 @@ struct Colour_Sensor
     int pin;
     int value;
 
-} typedef Ultrasonic_Sensor;
+} typedef Colour_Sensor;
+
+struct Motor
+{
+    char* name;
+    int a;
+    int b;
+    int value;
+
+} typedef Motor;
+
+struct Wheels
+{
+    Motor left;
+    Motor right;
+
+} typedef Wheels;
+
+struct Arm
+{
+    Motor first;
+    Motor second;
+    Motor claw;
+
+} typedef Arm;
 
 Ultrasonic_Sensor us[] = {
                           {"left", 1, 2, 3},
@@ -34,20 +59,31 @@ Colour_Sensor cs[] = {
                           {"right", 7, 8}
                          };
 
+Motor motors[] = {
+                          {"left", 1, 2, 0},
+                          {"right", 7, 8, 0},
+                          {"first", 1, 2, 0},
+                          {"second", 1, 2, 0},
+                          {"claw", 1, 2, 0}
+                         };
+
+Wheels wheels;
+Arm arm;
+
 
 void print_cs()
 {
-    static i;
+    static int i;
 
     for (i = 0; i < NUMBER_CS; i ++)
     {
-        printf("NAME: %s PIN: %d VALUE: %d \n", cs[i].name, us[i].pin, us[i].value);
+        printf("NAME: %s PIN: %d VALUE: %d \n", cs[i].name, cs[i].pin, cs[i].value);
     }
 }
 
 void print_us()
 {
-    static i;
+    static int i;
 
     for (i = 0; i < NUMBER_US; i ++)
     {
@@ -55,7 +91,9 @@ void print_us()
     }
 }
 
-void poll_us()
+// -- POLL SENSORS -- //
+
+void poll_cs()
 {
     static int i;
 
@@ -80,7 +118,7 @@ void poll_us()
 float get_us(char* name)
 {
     /* sequential search */
-    static i;
+    static int i;
 
     for (i = 0; i < NUMBER_US; i ++)
     {
@@ -96,7 +134,7 @@ float get_us(char* name)
 int get_cs(char* name)
 {
     /* sequential search */
-    static i;
+    static int i;
 
     for (i = 0; i < NUMBER_CS; i ++)
     {
@@ -109,6 +147,28 @@ int get_cs(char* name)
     return -1;
 }
 
+int get_button()
+{
+    return 1;
+}
+
+void drop_arm()
+{
+    /* full extend te motors, for the second motor wait until button is pressed */
+
+}
+
+void raise_arm()
+{
+
+}
+
+/* sets motor speed and a/b pins */
+void set_motor()
+{
+
+}
+
 
 int main(int argc, char** argv)
 {
@@ -116,23 +176,38 @@ int main(int argc, char** argv)
     srand(time(0));
     char buffer[1024];
 
+    wheels.left = motors[0];
+    wheels.right = motors[1];
+
+    arm.first = motors[2];
+    arm.second = motors[3];
+    arm.claw = motors[4];
+
+    poll_cs();
+
     while (1)
     {
         poll_us();
+        poll_cs();
 
         printf("> ");
         fgets(buffer, 1024, stdin);
 
-        if (buffer[0] == 'u')
+        if ((strcmp(buffer, "ultra\n") == 0))
         {
             print_us();
+        }
+        else if ((strcmp(buffer, "colour\n") == 0))
+        {
+            print_cs();
+        }
+        else if ((strcmp(buffer, "motor\n") == 0))
+        {
+
         }
     }
 
 
-
-    
-
-
     return 0;
 }
+
