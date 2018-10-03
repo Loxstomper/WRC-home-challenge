@@ -1,5 +1,3 @@
-#include <string.h>
-
 #define NUMBER_US 1
 #define NUMBER_CS 3
 #define NUMBER_MOTORS 5
@@ -46,6 +44,12 @@ struct Arm
 
 } typedef Arm;
 
+struct Button
+{
+    int pin;
+    int value;
+} typedef Button;
+
 // -- GLOBALS -- //
 
 Ultrasonic_Sensor us[] = {
@@ -65,52 +69,50 @@ Motor motors[] = {
                           {"right", 3, 48, 46, 0},
                           {"first", 4, 44, 42, 0},
                           {"second", 5, 40, 38, 0},
-                          {"claw", 6, 36, 34`, 0}
+                          {"claw", 6, 36, 34, 0}
                          };
 
 Wheels wheels;
 Arm arm;
+Button button;
+
+char buffer[64];
+char tokens[10][10];
 
 void setup_pins()
 {
     /* iterate over motors */
-//    for (int i = 0; i < NUMBER_MOTORS; i ++)
-//    {
-//      pinMode(motors[i].enable, OUTPUT);
-//      pinMode(motors[i].a, OUTPUT);
-//      pinMode(motors[i].b, OUTPUT);
-//
-//      motors[i].value = 0;
-//      analogWrite(motors[i].enable, 0);
-//      digitalWrite(motors[i].a, 0);
-//      digitalWrite(motors[i].b, 0);
-//    }
+    for (int i = 0; i < NUMBER_MOTORS; i ++)
+    {
+      pinMode(motors[i].enable, OUTPUT);
+      pinMode(motors[i].a, OUTPUT);
+      pinMode(motors[i].b, OUTPUT);
+
+      motors[i].value = 0;
+      analogWrite(motors[i].enable, 0);
+      digitalWrite(motors[i].a, 0);
+      digitalWrite(motors[i].b, 0);
+    }
+
     /* iterate over colour sensors */
     for (int i = 0; i < NUMBER_CS; i ++)
     {
       pinMode(cs[i].pin, INPUT);
       cs[i].value = 0;
     }
+
     /* interate over ultrasonic sensors */
-//    for (int i = 0; i < NUMBER_US; i ++)
-//    {
-//      pinMode(us[i].trig, OUTPUT);
-//      pinMode(us[i].echo, INPUT);
-//      digitalWrite(us[i].trig, 0);
-//      us[i].value = 0;
-//    }
-}
-
-void setup_motors()
-{
-    for (int i = 0; i < NUMBER_MOTORS; i ++)
+    for (int i = 0; i < NUMBER_US; i ++)
     {
-        // digital write a and b to be 0
-        motors[i].value = 0;
-        analogWrite(motors[i].enable, motors[i].value);
+      pinMode(us[i].trig, OUTPUT);
+      pinMode(us[i].echo, INPUT);
+      digitalWrite(us[i].trig, 0);
+      us[i].value = 0;
     }
-}
 
+    pinMode(button.pin, INPUT);
+    button.value = 0;
+}
 
 void print_cs()
 {
@@ -214,8 +216,14 @@ void raise_arm()
 }
 
 /* sets motor speed and a/b pins */
-void set_motor()
+void set_motor(char* name, int a_val, int b_val, int speed)
 {
+    Serial.print(name);
+    Serial.print(a_val);
+    Serial.print(b_val);
+    Serial.print(speed);
+
+    
 
 }
 
@@ -245,11 +253,12 @@ void move_back(int speed)
     analogWrite(wheels.right.enable, speed);
 }
 
+
 void setup() 
 {
-  Serial.begin(9600);
-  
-  // put your setup code here, to run once:
+    Serial.begin(9600);
+
+    // put your setup code here, to run once:
     wheels.left = motors[0];
     wheels.right = motors[1];
 
@@ -258,47 +267,89 @@ void setup()
     arm.claw = motors[4];
 
     setup_pins();
-
 }
+
+void get_args()
+{
+    static int position;
+    static char temp[64];
+    char* arg;
+
+    position = 0;
+    
+    /* probably dont need to conserve the buffer */
+    /* strcpy(temp, buffer); */
+
+    Serial.print("SOURCE: ");
+    Serial.println(buffer);
+
+    arg = strtok(buffer, ":");
+
+    while (arg != NULL)
+    {
+        strcpy(tokens[position], arg);
+        position ++;
+        arg = strtok(NULL, ":");
+    }
+
+    /* tokens[position + 1] = '\0'; */
+
+    /* for (int i = 0; i < position; i ++) */
+    /* { */
+    /*     Serial.println(tokens[i]); */
+    /* } */
+}
+
 
 void loop() 
 {
-  char x;
-  String str;
-  // put your main code here, to run repeatedly:
-  if (Serial.available() > 0)
-  {
-    //x = Serial.read();
-    str = Serial.readString();
-    // GET US [NAME]
-    // GET CS [NAME]
-    // SET M [NAME] [F/B]
-    if (str == "GET")
+    char x;
+    int arg_count;
+    int pos;
+    // put your main code here, to run repeatedly:
+    if (Serial.available() > 0)
     {
-      Serial.println("GETTING");
-      print_cs();
-    }
-    else if (str == "SET")
-    {
-      Serial.println("SETTING");
-    }
-    else if (str == "FORWARD")
-    {
-      Serial.println("MOVING FORWARD");
-      move_forward(200);
-    }
+        pos = 0;
     
-    
-    Serial.println(str);
-    
-    
-  }
+        while (Serial.available())
+        {
+           buffer[pos] = Serial.read();
+           pos ++;
+           delay(5);
+        }
 
-  Serial.println("US");
-  Serial.println(us[0].value);
-  
-  poll_cs();
-  poll_us();
-  
+        buffer[pos + 1] = '\0';
+
+        get_args();
+
+
+
+        if ((strcmp("GET", tokens[0])) == 0)
+        {
+            if ((strcmp("US", tokens[1])) == 0)
+            {
+                Serial.println(get_us(tokens[2]));
+            }
+            else if ((strcmp("CS", tokens[1])) == 0)
+            {
+                Serial.println(get_cs(tokens[2]));
+            }
+        }
+        else if ((strcmp("SET", tokens[0])) == 0)
+        {
+            if ((strcmp("M", tokens[1])) == 0)
+            {
+                set_motor(tokens[2], atoi(tokens[3]), atoi(tokens[4]), atoi(tokens[5]));
+            }
+        
+        }   
+    }
+
+    //   Serial.println("US");
+    //   Serial.println(us[0].value);
+
+    poll_cs();
+    poll_us();
+
 
 }
