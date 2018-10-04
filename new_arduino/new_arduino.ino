@@ -22,9 +22,9 @@ struct Colour_Sensor
 struct Motor
 {
     char* name;
-    int enable;
-    int a;
-    int b;
+    int enable; // pin
+    int a; // pin
+    int b; // pin
     int value;
 
 } typedef Motor;
@@ -219,14 +219,31 @@ void raise_arm()
 }
 
 /* sets motor speed and a/b pins */
-void set_motor(char* name, int a_val, int b_val, int speed)
+void set_motor(char* name, int a_val, int b_val, int val)
 {
-    Serial.print(name);
-    Serial.print(a_val);
-    Serial.print(b_val);
-    Serial.print(speed);
+    //Serial.print(name);
+    //Serial.print(a_val);
+    //Serial.print(b_val);
+    //Serial.print(speed);
 
-    
+    static int i;
+
+    // searches for the correct motors based off the name
+    for (i = 0; i < NUMBER_MOTORS; i ++)
+    {
+      if ((strcmp(motors[i].name, name)) == 0)
+      {
+        // update the hbridge 
+        digitalWrite(motors[i].a, a_val);
+        digitalWrite(motors[i].b, b_val);
+        // set the speed
+        analogWrite(motors[i].enable, val);
+        
+        motors[i].value = val;
+        
+        return;
+      }
+    }
 
 }
 
@@ -342,6 +359,7 @@ void loop()
         {
             if ((strcmp("M", tokens[1])) == 0)
             {
+                // name, a, b, speed
                 set_motor(tokens[2], atoi(tokens[3]), atoi(tokens[4]), atoi(tokens[5]));
             }
         
