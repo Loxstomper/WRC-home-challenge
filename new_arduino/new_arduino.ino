@@ -53,23 +53,23 @@ struct Button
 // -- GLOBALS -- //
 
 Ultrasonic_Sensor us[] = {
-                          {"left", 53, 51, 0},
-                          {"centre", 49, 47, 0},
-                          {"right", 45, 43, 0}
+                          {"left", 23, 22, 0},
+                          {"centre", 25, 24, 0},
+                          {"right", 27, 26, 0}
                          };
 
 Colour_Sensor cs[] = {
-                          {"left", A0, 0},
-                          {"centre", A1, 5},
-                          {"right", A2, 8}
+                          {"left", A8, 0},
+                          {"centre", A10, 5},
+                          {"right", A12, 8}
                          };
 
 Motor motors[] = {
-                          {"left", 2, 52, 50, 0},
-                          {"right", 3, 48, 46, 0},
-                          {"first", 4, 44, 42, 0},
-                          {"second", 5, 40, 38, 0},
-                          {"claw", 6, 36, 34, 0}
+                          {"left", 2, 30, 31, 0},
+                          {"right", 3, 34, 35, 0},
+                          {"first", 4, 40, 41, 0},
+                          {"second", 5, 44, 45, 0},
+                          {"claw", 6, 50, 51, 0}
                          };
 
 Wheels wheels;
