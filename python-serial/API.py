@@ -70,7 +70,7 @@ class CS():
         message = "GET:CS:{0}"
         self.ser.write((message.format(name)).encode())
         response = self.ser.readline()
-        response = self.response.decode()
+        return response.decode()
 
 class US():
     def __init__(self, ser, names):
@@ -81,7 +81,7 @@ class US():
         message = "GET:US:{0}"
         self.ser.write((message.format(name)).encode())
         response = self.ser.readline()
-        response = self.response.decode()
+        return response.decode()
 
 
 class API():
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     print("START")
 
     while True:
-        print(api.cs.get(api.cs.names[0]))
+        print(api.cs.get("left"))
         try:
             print("FORWARD")
             api.wheels.forward(200)
