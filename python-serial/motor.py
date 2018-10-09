@@ -1,4 +1,5 @@
-
+import serial
+from time import sleep
 
 # new
 def stop():
@@ -58,4 +59,13 @@ def drop_arm(speed):
     message = "SET:M:{0}:1:0:{1}"
 
     ser.write((message.format("first", speed)).encode())
+
+if __name__ == "__main__":
+    ser = serial.Serial('/dev/ttyACM0', timeout=1)
+    while True:
+        raise_arm(200)
+        sleep(5)
+        drop_arm(200)
+        sleep(5)
+
 
