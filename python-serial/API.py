@@ -102,8 +102,5 @@ if __name__ == "__main__":
     api = API("/dev/ttyACM0")
 
     while True:
-        api.wheels.forward(200)
-        sleep(2)
-        api.wheels.backwards(200)
-        sleep(2)
+        print(api.cs.get(api.cs.names[0]))
 
