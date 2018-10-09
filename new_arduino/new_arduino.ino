@@ -260,6 +260,18 @@ void move_backwards(int speed)
     set_motor("right", 1, 0, speed);
 }
 
+void turn_left(int speed)
+{
+    set_motor("left", 0, 0, 0);
+    set_motor("right", 0, 1, speed);
+}
+
+void turn_right(int speed)
+{
+    set_motor("left", 1, 0, speed);
+    set_motor("right", 0, 0, 0);
+}
+
 void move_back(int speed)
 {
     /* make a and b high for both motors */
@@ -384,6 +396,14 @@ void loop()
         else if ((strcmp("BACKWARDS", tokens[0])) == 0)
         {
             move_backwards(atoi(tokens[1]));
+        }        
+        else if ((strcmp("LEFT", tokens[0])) == 0)
+        {
+            turn_left(atoi(tokens[1]));
+        }
+        else if ((strcmp("RIGHT", tokens[0])) == 0)
+        {
+            turn_right(atoi(tokens[1]));
         }
         // STOP:ALL:
         else if ((strcmp("STOP", tokens[0])) == 0)
