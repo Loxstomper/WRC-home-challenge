@@ -249,15 +249,8 @@ void set_motor(char* name, int a_val, int b_val, int val)
 
 void move_forward(int speed)
 {
-    /* make a and b high for both motors */
-    digitalWrite(wheels.left.a, HIGH);
-    digitalWrite(wheels.left.b, HIGH);
-    digitalWrite(wheels.right.a, HIGH);
-    digitalWrite(wheels.right.b, HIGH);
-
-    /* analogwrite on the pins */
-    analogWrite(wheels.left.enable, speed);
-    analogWrite(wheels.right.enable, speed);
+    set_motor("left", 1, 0, speed);
+    set_motor("right", 1, 0, speed);
 }
 
 void move_back(int speed)
