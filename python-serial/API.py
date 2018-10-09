@@ -70,12 +70,13 @@ class CS():
         message = "GET:CS:{0}"
         self.ser.write((message.format(name)).encode())
         response = self.ser.readline()
-        return response.decode()
+        return int(response.decode())
 
     def get_all(self):
         res = {}
         for name in self.names:
             res[name] = self.get(name)
+            sleep(0.5)
         return res
 
 class US():
@@ -87,12 +88,13 @@ class US():
         message = "GET:US:{0}"
         self.ser.write((message.format(name)).encode())
         response = self.ser.readline()
-        return response.decode()
+        return int(response.decode())
 
     def get_all(self):
         res = {}
         for name in self.names:
             res[name] = self.get(name)
+            sleep(0.5)
         return res
 
 
