@@ -104,9 +104,7 @@ if __name__ == "__main__":
     print("START")
 
     while True:
-<<<<<<< HEAD
         print(api.cs.get(api.cs.names[0]))
-=======
         try:
             print("FORWARD")
             api.wheels.forward(200)
@@ -128,5 +126,4 @@ if __name__ == "__main__":
             sleep(1)
             api.ser.close()
             exit()
->>>>>>> 4ba9361f8c062e3133aee0d6abc7370029091158
 
