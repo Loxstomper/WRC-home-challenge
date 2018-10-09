@@ -1,5 +1,6 @@
 import serial
 from time import sleep
+import sys
 
 class Wheels():
     def __init__(self, ser):
@@ -102,10 +103,14 @@ if __name__ == "__main__":
     api = API("/dev/ttyACM0")
 
     while True:
-        api.wheels.forward(200)
-        sleep(2)
-        api.wheels.stop()
-        sleep(2)
-        api.wheels.backwards(200)
-        sleep(2)
+        try:
+            api.wheels.forward(200)
+            sleep(2)
+            api.wheels.stop()
+            sleep(2)
+            api.wheels.backwards(200)
+            sleep(2)
+        except KeyboardInterrupt:
+            api.stop()
+            exit()
 
