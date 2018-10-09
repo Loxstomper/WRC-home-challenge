@@ -385,6 +385,7 @@ void loop()
         {
             move_backwards(atoi(tokens[1]));
         }
+        // STOP:ALL:
         else if ((strcmp("STOP", tokens[0])) == 0)
         {
             if ((strcmp("ALL", tokens[1])) == 0)
