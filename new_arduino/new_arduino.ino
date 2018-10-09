@@ -253,6 +253,12 @@ void move_forward(int speed)
     set_motor("right", 1, 0, speed);
 }
 
+void move_backwards(int speed)
+{
+    set_motor("left", 0, 1, speed);
+    set_motor("right", 0, 1, speed);
+}
+
 void move_back(int speed)
 {
     /* make a and b high for both motors */
@@ -373,6 +379,10 @@ void loop()
         else if ((strcmp("FORWARD", tokens[0])) == 0)
         {
             move_forward(atoi(tokens[1]));
+        }
+        else if ((strcmp("BACKWARDS", tokens[0])) == 0)
+        {
+            move_backwards(atoi(tokens[1]));
         }
         else if ((strcmp("STOP", tokens[0])) == 0)
         {
