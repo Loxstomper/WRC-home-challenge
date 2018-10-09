@@ -6,9 +6,8 @@ class Wheels():
         self.ser = ser
 
     def stop(self):
-        message = "SET:M:{0}:0:0:{1}"
-        self.ser.write((message.format("left", 0)).encode())
-        self.ser.write((message.format("right", 0)).encode())
+        message = "FORWARD:{0}" # forward because less code and characters
+        self.ser.write((message.format(0)).encode())
 
     def forward(self, speed):
         message = "FORWARD:{0}"
@@ -19,18 +18,12 @@ class Wheels():
         self.ser.write((message.format(speed)).encode())
 
     def left(self, speed):
-        messageLW = "SET:M:{0}:0:1:{1}"
-        messageRW = "SET:M:{0}:1:0:{1}"
-
-        self.ser.write((messageLW.format("left", speed)).encode())
-        self.ser.write((messageRW.format("right", speed)).encode())
+        message = "LEFT:{0}"
+        self.ser.write((message.format(speed)).encode())
 
     def right(self, speed):
-        messageLW = "SET:M:{0}:1:0:{1}"
-        messageRW = "SET:M:{0}:0:1:{1}"
-
-        self.ser.write((messageLW.format("left", speed)).encode())
-        self.ser.write((messageRW.format("right", speed)).encode())
+        message = "RIGHT:{0}"
+        self.ser.write((message.format(speed)).encode())
 
 
 class Claw():
@@ -101,7 +94,7 @@ class API():
         self.us = US(self.ser, self.US_names)
 
     def stop(self):
-        message = "STOP:ALL"
+        message = "STOP:ALL:"
         self.ser.write(message.encode())
 
 
