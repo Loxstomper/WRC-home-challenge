@@ -47,7 +47,6 @@ class Claw():
         message = "B:E:{0}:"
         self.ser.write((message.format(speed)).encode())
 
-
     def extend_arm(self, speed):
         message = "E:A:{0}:"
         self.ser.write((message.format(speed)).encode())
