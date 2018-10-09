@@ -15,10 +15,8 @@ class Wheels():
         self.ser.write((message.format(speed)).encode())
 
     def backwards(self, speed):
-        message = "SET:M:{0}:1:0:{1}"
-
-        self.ser.write((message.format("left", speed)).encode())
-        self.ser.write((message.format("right", speed)).encode())
+        message = "BACKWARDS:{0}"
+        self.ser.write((message.format(speed)).encode())
 
     def left(self, speed):
         messageLW = "SET:M:{0}:0:1:{1}"
