@@ -72,6 +72,12 @@ class CS():
         response = self.ser.readline()
         return response.decode()
 
+    def get_all(self):
+        res = {}
+        for name in self.names:
+            res.update({name, self.get(name)})
+        return res
+
 class US():
     def __init__(self, ser, names):
         self.ser = ser
@@ -82,6 +88,12 @@ class US():
         self.ser.write((message.format(name)).encode())
         response = self.ser.readline()
         return response.decode()
+
+    def get_all(self):
+        res = {}
+        for name in self.names:
+            res.update({name, self.get(name)})
+        return res
 
 
 class API():
@@ -106,7 +118,7 @@ if __name__ == "__main__":
     while True:
 
         try:
-            print("CS: left ", api.cs.get("left"))
+            print(api.cs.get_all())
             # print("FORWARD")
             # api.wheels.forward(200)
             # sleep(2)
