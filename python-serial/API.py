@@ -104,7 +104,7 @@ if __name__ == "__main__":
     while True:
         api.wheels.forward(200)
         sleep(2)
-        api.stop()
+        api.wheels.stop()
         sleep(2)
         api.wheels.backwards(200)
         sleep(2)
