@@ -250,13 +250,14 @@ void set_motor(char* name, int a_val, int b_val, int val)
 void move_forward(int speed)
 {
     set_motor("left", 1, 0, speed);
-    set_motor("right", 1, 0, speed);
+    set_motor("right", 0, 1, speed);
 }
 
 void move_backwards(int speed)
 {
     set_motor("left", 0, 1, speed);
-    set_motor("right", 0, 1, speed);
+    // right motor is flipped
+    set_motor("right", 1, 0, speed);
 }
 
 void move_back(int speed)
