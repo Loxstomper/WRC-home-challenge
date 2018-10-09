@@ -103,6 +103,7 @@ class US():
 
 class API():
     def __init__(self, serial_port):
+        print("API being created")
         self.ser = serial.Serial(serial_port, timeout=1)
         self.CS_names = ["left", "center", "right"]
         self.US_names = ["left", "center", "right"]
@@ -110,6 +111,8 @@ class API():
         self.claw = Claw(self.ser)
         self.cs = CS(self.ser, self.CS_names)
         self.us = US(self.ser, self.US_names)
+        sleep(2)
+        print("API created")
 
     def stop(self):
         message = "STOP:ALL:"
@@ -117,7 +120,7 @@ class API():
 
 
 if __name__ == "__main__":
-    api = API("/dev/ttyACM0")
+    api = API("/dev/ttyACM1")
     print("START")
 
     while True:
