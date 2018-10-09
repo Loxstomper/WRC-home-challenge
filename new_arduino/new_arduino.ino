@@ -273,6 +273,19 @@ void move_back(int speed)
     analogWrite(wheels.right.enable, speed);
 }
 
+void stop_all_motors()
+{
+    for (int i = 0; i < NUMBER_MOTORS; i ++)
+    {
+        // first stop movement
+        analogWrite(motors[i].enable, 0)
+        motors[i].val = 0;
+        // set dir pins to low
+        digitalWrite(motors[i].a, LOW);
+        digitalWrite(motors[i].b, LOW);
+    }
+}
+
 
 void setup() 
 {
@@ -364,6 +377,17 @@ void loop()
             }
         
         }   
+        else if ((strcmp("FORWARD"), tokens[0]) == 0)
+        {
+            move_forward(atoi(tokens[1]));
+        }
+        else if ((stcmp("STOP"), tokens[0]) == 0)
+        {
+            if ((strcmp("ALL")) == 0)
+            {
+                stop_all_motors();
+            }
+        }
     }
 
     //   Serial.println("US");
@@ -371,6 +395,4 @@ void loop()
 
     poll_cs();
     poll_us();
-
-
 }
