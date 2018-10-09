@@ -207,17 +207,6 @@ int get_button()
     return 1;
 }
 
-void drop_arm()
-{
-    /* full extend te motors, for the second motor wait until button is pressed */
-
-}
-
-void raise_arm()
-{
-
-}
-
 /* sets motor speed and a/b pins */
 void set_motor(char* name, int a_val, int b_val, int val)
 {
@@ -233,14 +222,14 @@ void set_motor(char* name, int a_val, int b_val, int val)
     {
       if ((strcmp(motors[i].name, name)) == 0)
       {
-        // update the hbridge 
+        // update the hbridge
         digitalWrite(motors[i].a, a_val);
         digitalWrite(motors[i].b, b_val);
         // set the speed
         analogWrite(motors[i].enable, val);
-        
+
         motors[i].value = val;
-        
+
         return;
       }
     }
@@ -298,8 +287,38 @@ void stop_all_motors()
     }
 }
 
+void extend_claw(int speed)
+{
+    set_motor("claw", 1, 0, speed);
+}
 
-void setup() 
+void bend_claw(int speed)
+{
+    set_motor("claw", 0, 1, speed);
+}
+
+void extend_elbow(int speed)
+{
+    set_motor("second", 1, 0, speed);
+}
+
+void bend_elbow(int speed)
+{
+    set_motor("second", 0, 1, speed);
+}
+
+void extend_arm(int speed)
+{
+    set_motor("first", 1, 0, speed);
+}
+
+void bend_arm(int speed)
+{
+    set_motor("first", 0, 1, speed);
+}
+
+
+void setup()
 {
     Serial.begin(9600);
 
@@ -321,7 +340,7 @@ void get_args()
     char* arg;
 
     position = 0;
-    
+
     /* probably dont need to conserve the buffer */
     /* strcpy(temp, buffer); */
 
@@ -346,7 +365,7 @@ void get_args()
 }
 
 
-void loop() 
+void loop()
 {
     char x;
     int arg_count;
@@ -355,7 +374,7 @@ void loop()
     if (Serial.available() > 0)
     {
         pos = 0;
-    
+
         while (Serial.available())
         {
            buffer[pos] = Serial.read();
@@ -387,8 +406,8 @@ void loop()
                 // name, a, b, speed
                 set_motor(tokens[2], atoi(tokens[3]), atoi(tokens[4]), atoi(tokens[5]));
             }
-        
-        }   
+
+        }
         else if ((strcmp("FORWARD", tokens[0])) == 0)
         {
             move_forward(atoi(tokens[1]));
@@ -396,7 +415,7 @@ void loop()
         else if ((strcmp("BACKWARDS", tokens[0])) == 0)
         {
             move_backwards(atoi(tokens[1]));
-        }        
+        }
         else if ((strcmp("LEFT", tokens[0])) == 0)
         {
             turn_left(atoi(tokens[1]));
@@ -413,6 +432,37 @@ void loop()
                 stop_all_motors();
             }
         }
+        // CLAW MESSAGES
+        else if((strcmp("E", tokens[0])) == 0)
+        {
+            if((strcmp("C", tokens[1])) == 0)
+            {
+                extend_claw(atoi(tokens[2]));
+            }
+            else if((strcmp("E", tokens[1])) == 0)
+            {
+                extend_elbow(atoi(tokens[2]));
+            }
+            else if((strcmp("A", tokens[1])) == 0)
+            {
+                extend_arm(atoi(tokens[2]));
+            }
+        }
+        else if((strcmp("B", tokens[1])) == 0)
+        {
+            if((strcmp("C", tokens[1])) == 0)
+            {
+                bend_claw(atoi(tokens[2]));
+            }
+            else if((strcmp("E", tokens[1])) == 0)
+            {
+                bend_elbow(atoi(tokens[2]));
+            }
+            else if((strcmp("A", tokens[1])) == 0)
+            {
+                bend_arm(atoi(tokens[2]));
+            }
+          }
     }
 
     //   Serial.println("US");

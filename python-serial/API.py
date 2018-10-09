@@ -7,7 +7,7 @@ class Wheels():
         self.ser = ser
 
     def stop(self):
-        message = "FORWARD:{0}" # forward because less code and characters
+        message = "FORWARD:{0}"  # forward because less code and characters
         self.ser.write((message.format(0)).encode())
 
     def forward(self, speed):
@@ -31,34 +31,30 @@ class Claw():
     def __init__(self, ser):
         self.ser = ser
 
-    def open_claw(self, speed):
-        message = "SET:M:{0}:1:0:{1}"
-        self.ser.write((message.format("claw", speed)).encode())
+    def extend_claw(self, speed):
+        message = "E:C:{0}"
+        self.ser.write((message.format(speed)).encode())
 
-    def close_claw(self, speed):
-        message = "SET:M:{0}:0:1:{1}"
-        self.ser.write((message.format("claw", speed)).encode())
+    def bend_claw(self, speed):
+        message = "B:C:{0}"
+        self.ser.write((message.format(speed)).encode())
 
     def extend_elbow(self, speed):
-        message = "SET:M:{0}:1:0:{1}"
-
-        self.ser.write((message.format("second", speed)).encode())
+        message = "E:E:{0}"
+        self.ser.write((message.format(speed)).encode())
 
     def bend_elbow(self, speed):
-        message = "SET:M:{0}:0:1:{1}"
+        message = "B:E:{0}"
+        self.ser.write((message.format(speed)).encode())
 
-        self.ser.write((message.format("second", speed)).encode())
 
+    def extend_arm(self, speed):
+        message = "E:A:{0}"
+        self.ser.write((message.format(speed)).encode())
 
-    def raise_arm(self, speed):
-        message = "SET:M:{0}:1:0:{1}"
-
-        self.ser.write((message.format("first", speed)).encode())
-
-    def drop_arm(self, speed):
-        message = "SET:M:{0}:1:0:{1}"
-
-        self.ser.write((message.format("first", speed)).encode())
+    def bend_arm(self, speed):
+        message = "B:A:{0}"
+        self.ser.write((message.format(speed)).encode())
 
 
 class CS():
@@ -127,7 +123,10 @@ if __name__ == "__main__":
     while True:
 
         try:
-            print(api.cs.get_all())
+            api.claw.bend_arm(200)
+            sleep(2)
+            api.claw.bend_arm(0)
+            sleep(2)
             # print("FORWARD")
             # api.wheels.forward(200)
             # sleep(2)
