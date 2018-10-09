@@ -70,7 +70,7 @@ class CS():
         message = "GET:CS:{0}"
         self.ser.write((message.format(name)).encode())
         response = self.ser.readline()
-        return int(response.decode())
+        return float(response.decode())
 
     def get_all(self):
         res = {}
@@ -88,7 +88,7 @@ class US():
         message = "GET:US:{0}"
         self.ser.write((message.format(name)).encode())
         response = self.ser.readline()
-        return int(response.decode())
+        return float(response.decode())
 
     def get_all(self):
         res = {}
