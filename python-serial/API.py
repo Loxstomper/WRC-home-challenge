@@ -75,7 +75,7 @@ class CS():
     def get_all(self):
         res = {}
         for name in self.names:
-            res.update({name, self.get(name)})
+            res[name] = self.get(name)
         return res
 
 class US():
@@ -92,7 +92,7 @@ class US():
     def get_all(self):
         res = {}
         for name in self.names:
-            res.update({name, self.get(name)})
+            res[name] = self.get(name)
         return res
 
 
