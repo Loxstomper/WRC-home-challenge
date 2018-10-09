@@ -289,12 +289,12 @@ void stop_all_motors()
 
 void extend_claw(int speed)
 {
-    set_motor("claw", 1, 0, speed);
+    set_motor("claw", 0, 1, speed);
 }
 
 void bend_claw(int speed)
 {
-    set_motor("claw", 0, 1, speed);
+    set_motor("claw", 1, 0, speed);
 }
 
 void extend_elbow(int speed)
@@ -448,7 +448,7 @@ void loop()
                 extend_arm(atoi(tokens[2]));
             }
         }
-        else if((strcmp("B", tokens[1])) == 0)
+        else if((strcmp("B", tokens[0])) == 0)
         {
             if((strcmp("C", tokens[1])) == 0)
             {
