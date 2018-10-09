@@ -278,8 +278,8 @@ void stop_all_motors()
     for (int i = 0; i < NUMBER_MOTORS; i ++)
     {
         // first stop movement
-        analogWrite(motors[i].enable, 0)
-        motors[i].val = 0;
+        analogWrite(motors[i].enable, 0);
+        motors[i].value = 0;
         // set dir pins to low
         digitalWrite(motors[i].a, LOW);
         digitalWrite(motors[i].b, LOW);
@@ -377,13 +377,13 @@ void loop()
             }
         
         }   
-        else if ((strcmp("FORWARD"), tokens[0]) == 0)
+        else if ((strcmp("FORWARD", tokens[0])) == 0)
         {
             move_forward(atoi(tokens[1]));
         }
-        else if ((stcmp("STOP"), tokens[0]) == 0)
+        else if ((strcmp("STOP", tokens[0])) == 0)
         {
-            if ((strcmp("ALL")) == 0)
+            if ((strcmp("ALL", tokens[1])) == 0)
             {
                 stop_all_motors();
             }
