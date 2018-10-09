@@ -1,34 +1,58 @@
 import serial
 from time import sleep
 
-class API():
-    def __init__(self, serial_port):
-        self.ser = serial.Serial(serial_port, timeout=1)
+class Wheels():
+    def __init__(self, ser):
+        self.ser = ser
 
-    # new
-    def stop_wheels(self):
+    def stop(self):
         message = "SET:M:{0}:0:0:{1}"
-
         self.ser.write((message.format("left", 0)).encode())
         self.ser.write((message.format("right", 0)).encode())
 
-    def open_claw(self, speed):
+    def forward(self, speed):
+        message = "SET:M:{0}:0:1:{1}"
+
+        self.ser.write((message.format("left", speed)).encode())
+        self.ser.write((message.format("right", speed)).encode())
+
+    def backwards(self, speed):
         message = "SET:M:{0}:1:0:{1}"
 
-        self.ser.write((message.format("claw", speed)).encode())
+        self.ser.write((message.format("left", speed)).encode())
+        self.ser.write((message.format("right", speed)).encode())
 
+    def left(self, speed):
+        messageLW = "SET:M:{0}:0:1:{1}"
+        messageRW = "SET:M:{0}:1:0:{1}"
+
+        self.ser.write((messageLW.format("left", speed)).encode())
+        self.ser.write((messageRW.format("right", speed)).encode())
+
+    def right(self, speed):
+        messageLW = "SET:M:{0}:1:0:{1}"
+        messageRW = "SET:M:{0}:0:1:{1}"
+
+        self.ser.write((messageLW.format("left", speed)).encode())
+        self.ser.write((messageRW.format("right", speed)).encode())
+
+
+class Claw():
+    def __init__(self, ser):
+        self.ser = ser
+
+    def open_claw(self, speed):
+        message = "SET:M:{0}:1:0:{1}"
+        self.ser.write((message.format("claw", speed)).encode())
 
     def close_claw(self, speed):
         message = "SET:M:{0}:0:1:{1}"
-
         self.ser.write((message.format("claw", speed)).encode())
-
 
     def extend_elbow(self, speed):
         message = "SET:M:{0}:1:0:{1}"
 
         self.ser.write((message.format("second", speed)).encode())
-
 
     def bend_elbow(self, speed):
         message = "SET:M:{0}:0:1:{1}"
@@ -47,57 +71,50 @@ class API():
         self.ser.write((message.format("first", speed)).encode())
 
 
-    def turn_left(self, speed):
-        messageLW = "SET:M:{0}:0:1:{1}"
-        messageRW = "SET:M:{0}:1:0:{1}"
+class CS():
+    def __init__(self, ser, names):
+        self.ser = ser
+        self.names = names
 
-        self.ser.write((messageLW.format("left", speed)).encode())
-        self.ser.write((messageRW.format("right", speed)).encode())
-
-
-    def turn_right(self, speed):
-        messageLW = "SET:M:{0}:1:0:{1}"
-        messageRW = "SET:M:{0}:0:1:{1}"
-
-        self.ser.write((messageLW.format("left", speed)).encode())
-        self.ser.write((messageRW.format("right", speed)).encode())
-
-
-    def get_sensor(self, sensor, name):
-        message = "GET:{0}:{1}"
-
-        self.ser.write((message.format(sensor, name)).encode())
-
+    def get(self, name):
+        message = "GET:CS:{0}"
+        self.ser.write((message.format(name)).encode())
         response = self.ser.readline()
         response = self.response.decode()
 
-    def move_forward(self, speed):
-        message = "SET:M:{0}:0:1:{1}"
+class US():
+    def __init__(self, ser, names):
+        self.ser = ser
+        self.names = names
 
-        self.ser.write((message.format("left", speed)).encode())
-        self.ser.write((message.format("right", speed)).encode())
+    def get(self, name):
+        message = "GET:US:{0}"
+        self.ser.write((message.format(name)).encode())
+        response = self.ser.readline()
+        response = self.response.decode()
 
-    def move_backwards(self, speed):
-        message = "SET:M:{0}:1:0:{1}"
 
-        self.ser.write((message.format("left", speed)).encode())
-        self.ser.write((message.format("right", speed)).encode())
+class API():
+    def __init__(self, serial_port):
+        self.ser = serial.Serial(serial_port, timeout=1)
+        self.CS_names = ["left", "center", "right"]
+        self.US_names = ["left", "center", "right"]
+        self.wheels = Wheels(self.ser)
+        self.claw = Claw(self.ser)
+        self.cs = CS(self.ser, self.CS_names)
+        self.us = US(self.ser, self.US_names)
 
     def stop(self):
         message = "STOP:ALL"
         self.ser.write(message.encode())
 
 
-
-
-
 if __name__ == "__main__":
     api = API("/dev/ttyACM0")
 
     while True:
-        api.move_forward(200)
+        api.wheels.forward(200)
         sleep(2)
-        api.stop()
+        api.wheels.backwards(200)
         sleep(2)
-
 
