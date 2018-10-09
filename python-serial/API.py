@@ -110,6 +110,10 @@ if __name__ == "__main__":
             sleep(2)
             api.wheels.backwards(200)
             sleep(2)
+            api.wheels.left(200)
+            sleep(2)
+            api.wheels.right(200)
+            sleep(2)
         except KeyboardInterrupt:
             api.stop()
             exit()
