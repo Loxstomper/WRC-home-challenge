@@ -32,28 +32,28 @@ class Claw():
         self.ser = ser
 
     def extend_claw(self, speed):
-        message = "E:C:{0}"
+        message = "E:C:{0}:"
         self.ser.write((message.format(speed)).encode())
 
     def bend_claw(self, speed):
-        message = "B:C:{0}"
+        message = "B:C:{0}:"
         self.ser.write((message.format(speed)).encode())
 
     def extend_elbow(self, speed):
-        message = "E:E:{0}"
+        message = "E:E:{0}:"
         self.ser.write((message.format(speed)).encode())
 
     def bend_elbow(self, speed):
-        message = "B:E:{0}"
+        message = "B:E:{0}:"
         self.ser.write((message.format(speed)).encode())
 
 
     def extend_arm(self, speed):
-        message = "E:A:{0}"
+        message = "E:A:{0}:"
         self.ser.write((message.format(speed)).encode())
 
     def bend_arm(self, speed):
-        message = "B:A:{0}"
+        message = "B:A:{0}:"
         self.ser.write((message.format(speed)).encode())
 
 
