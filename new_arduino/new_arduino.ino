@@ -317,11 +317,25 @@ void bend_arm(int speed)
     set_motor("first", 0, 1, speed);
 }
 
-void open_shoulder()
+void drop_arm()
 {
-    set_motor("first", 0, 1, 100);
-    delay(1000);
+    set_motor("first", 1, 0, 200);
+    delay(1700);
     set_motor("first", 0, 0, 0);
+    set_motor("second", 1, 0, 200);
+    delay(2100);
+    set_motor("second", 0, 0, 0);
+    //delay(500);
+    set_motor("second", 0, 1, 100);
+    delay(1000);
+    set_motor("second", 0, 0, 0);
+}
+
+void open_claw()
+{
+  set_motor("claw", 1, 0, 200);
+  delay(1000);
+  set_motor("claw", 0, 0, 0);
 }
 
 
@@ -472,7 +486,11 @@ void loop()
         }
         else if ((strcmp("S", tokens[0])) == 0)
         {
-            open_shoulder();
+            drop_arm();
+        }
+        else if ((strcmp("C", tokens[0])) == 0)
+        {
+            open_claw();
         }
     }
 
