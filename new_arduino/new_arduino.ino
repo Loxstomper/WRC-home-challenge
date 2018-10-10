@@ -488,7 +488,7 @@ void loop()
         {
             drop_arm();
         }
-        else if ((strcmp("C", tokens[0])) == 0)
+        else if ((strcmp("Z", tokens[0])) == 0)
         {
             open_claw();
         }

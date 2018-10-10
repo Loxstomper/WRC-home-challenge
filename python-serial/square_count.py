@@ -7,7 +7,7 @@ def forward_spaces(spaces, speed, api):
     count = 0
     previous = api.cs.get("centre")
     colour = 1 if previous <= 500 else 0
-    new_color = None
+    new_colour = None
     val = None
 
     print("STARTING ON: ", colour)
@@ -15,15 +15,15 @@ def forward_spaces(spaces, speed, api):
     api.wheels.forward(speed)
     while spaces > count:
         val = api.cs.get("centre")
-        new_color = 1 if val <= 500 else 0
+        new_colour = 1 if val <= 500 else 0
 
         print("COLOUR: ", new_colour)
 
-        if new_color != colour:
+        if new_colour != colour:
             count += 1
-            colour = new_color
+            colour = new_colour
 
-        sleep(0.25)
+        sleep(0.1)
 
     api.wheels.stop()
 
