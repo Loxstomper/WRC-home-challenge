@@ -317,6 +317,13 @@ void bend_arm(int speed)
     set_motor("first", 0, 1, speed);
 }
 
+void open_shoulder()
+{
+    set_motor("first", 0, 1, 100);
+    delay(1000);
+    set_motor("first", 0, 0, 0);
+}
+
 
 void setup()
 {
@@ -462,7 +469,11 @@ void loop()
             {
                 bend_arm(atoi(tokens[2]));
             }
-          }
+        }
+        else if ((strcmp("S", tokens[0])) == 0)
+        {
+            open_shoulder();
+        }
     }
 
     //   Serial.println("US");
