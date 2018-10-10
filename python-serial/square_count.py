@@ -27,21 +27,6 @@ def forward_spaces(spaces, speed, api):
 
     api.wheels.stop()
 
-def backward_spaces(spaces, api):
-    count = 0
-    previous = api.cs.get("center")
-    api.wheels.backward(speed)
-    while spaces >= count:
-        check_cs = api.cs.get("center")
-        if check_cs is not previous:
-            count += 1
-            previous = api.get("center")
-    api.wheels.stop()
-
-speed = 100
-api = API.API("/dev/ttyACM0")
-count = 0
-
 forward_spaces(4, speed, api)
 
 

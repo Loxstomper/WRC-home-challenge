@@ -2,6 +2,7 @@ import serial
 from time import sleep
 import sys
 
+
 class Wheels():
     def __init__(self, ser):
         self.ser = ser
@@ -25,6 +26,56 @@ class Wheels():
     def right(self, speed):
         message = "RIGHT:{0}"
         self.ser.write((message.format(speed)).encode())
+
+    def forward_tiles(self, spaces):
+        count = 0
+        previous = api.cs.get("centre")
+        colour = 1 if previous <= 500 else 0
+        new_colour = None
+        val = None
+
+        print("STARTING ON: ", colour)
+
+        self.forward(100)
+
+        while spaces > count:
+            val = api.cs.get("centre")
+            new_colour = 1 if val <= 500 else 0
+
+            print("COLOUR: ", new_colour)
+
+            if new_colour != colour:
+                count += 1
+                colour = new_colour
+
+            sleep(0.1)
+
+        self.stop()
+
+    def backward_tiles(self, spaces):
+        count = 0
+        previous = api.cs.get("centre")
+        colour = 1 if previous <= 500 else 0
+        new_colour = None
+        val = None
+
+        print("STARTING ON: ", colour)
+
+        self.backward(100)
+
+        while spaces > count:
+            val = api.cs.get("centre")
+            new_colour = 1 if val <= 500 else 0
+
+            print("COLOUR: ", new_colour)
+
+            if new_colour != colour:
+                count += 1
+                colour = new_colour
+
+            sleep(0.1)
+
+        self.stop()
 
 
 class Claw():
@@ -74,9 +125,10 @@ class CS():
     def get_all(self):
         res = {}
         for name in self.names:
-            res[name] = self.get(name)
+            res["CS "+name] = self.get(name)
             sleep(0.5)
         return res
+
 
 class US():
     def __init__(self, ser, names):
@@ -95,7 +147,7 @@ class US():
     def get_all(self):
         res = {}
         for name in self.names:
-            res[name] = self.get(name)
+            res["US"+ name] = self.get(name)
             sleep(0.5)
         return res
 
@@ -116,6 +168,12 @@ class API():
     def stop(self):
         message = "STOP:ALL:"
         self.ser.write(message.encode())
+
+    def diagnostics(self):
+        print("Running Diagnostics")
+        res = self.cs.get_all()
+        res.update(self.us.get_all())
+
 
 
 if __name__ == "__main__":
