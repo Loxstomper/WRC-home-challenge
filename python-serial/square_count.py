@@ -1,42 +1,57 @@
 import API
 from time import sleep
 
-speed = 100
-api = API.API("/dev/ttyACM0")
-count = 0
 
-def forward_spaces(spaces, api):
+
+def forward_spaces(spaces, speed, api):
     count = 0
-    previous = api.cs.get("center")
+    previous = api.cs.get("centre")
+    colour = 1 if previous <= 500 else 0
+    new_color = None
+    val = None
+
+    print("STARTING ON: ", colour)
+
     api.wheels.forward(speed)
-    while spaces is not count:
-        check_cs = api.cs.get("center")
-        if(check_cs is not previous):
+    while spaces > count:
+        val = api.cs.get("centre")
+        new_color = 1 if val <= 500 else 0
+
+        print("COLOUR: ", new_colour)
+
+        if new_color != colour:
             count += 1
-            previous = api.get("center")
+            colour = new_color
+
+        sleep(0.25)
+
     api.wheels.stop()
 
 def backward_spaces(spaces, api):
     count = 0
     previous = api.cs.get("center")
     api.wheels.backward(speed)
-    while spaces is not count:
+    while spaces >= count:
         check_cs = api.cs.get("center")
-        if(check_cs is not previous):
+        if check_cs is not previous:
             count += 1
             previous = api.get("center")
     api.wheels.stop()
 
+speed = 100
+api = API.API("/dev/ttyACM0")
+count = 0
+
+forward_spaces(4, speed, api)
 
 
-
-while True:
-    try:
-        print(api.cs.get_all())
-        sleep(1)
-
-    except KeyboardInterrupt:
-        api.stop()
-        sleep(1)
-        api.ser.close()
-        exit()
+# while True:
+#     try:
+#         print(api.cs.get_all())
+#         sleep(1)
+#
+#     except KeyboardInterrupt:
+#         api.stop()
+#         sleep(1)
+#         api.ser.close()
+#         exit()
