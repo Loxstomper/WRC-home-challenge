@@ -62,7 +62,7 @@ class CS():
         self.names = names
 
     def get(self, name):
-        message = "GET:CS:{0}"
+        message = "GET:CS:{0}:"
         self.ser.write((message.format(name)).encode())
         response = self.ser.readline()
 
