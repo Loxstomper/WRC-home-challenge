@@ -4,8 +4,9 @@ import sys
 
 
 class Wheels():
-    def __init__(self, ser):
+    def __init__(self, ser, names):
         self.ser = ser
+        self.names = names
 
     def stop(self):
         message = "FORWARD:{0}"  # forward because less code and characters
@@ -77,10 +78,25 @@ class Wheels():
 
         self.stop()
 
+    def diagnose(self):
+        for name in self.names:
+            print("Running {0} wheel".format(name))
+            message = "SET:M:{0}:1:0:100"
+            self.ser.write((message.format(name)).encode())
+            sleep(2)
+            message = "SET:M:{0}:0:1:100"
+            self.ser.write((message.format(name)).encode())
+            sleep(2)
+            print("Stopping {0} wheel".format(name))
+            self.stop()
+
+
+
 
 class Claw():
-    def __init__(self, ser):
+    def __init__(self, ser, names):
         self.ser = ser
+        self.names = names
 
     def extend_claw(self, speed):
         message = "E:C:{0}:"
@@ -156,10 +172,12 @@ class API():
     def __init__(self, serial_port):
         print("API being created")
         self.ser = serial.Serial(serial_port, timeout=1)
+        self.wheel_names = ["right", "left"]
+        self.claw_names = ["first", "second", "claw"]
         self.CS_names = ["left", "center", "right"]
         self.US_names = ["left", "center", "right"]
-        self.wheels = Wheels(self.ser)
-        self.claw = Claw(self.ser)
+        self.wheels = Wheels(self.ser, self.wheel_names)
+        self.claw = Claw(self.ser, self.claw_names)
         self.cs = CS(self.ser, self.CS_names)
         self.us = US(self.ser, self.US_names)
         sleep(2)
@@ -170,9 +188,12 @@ class API():
         self.ser.write(message.encode())
 
     def diagnostics(self):
-        print("Running Diagnostics")
+        print("Running Diagnostic")
+        print("Sensor Values")
         res = self.cs.get_all()
         res.update(self.us.get_all())
+
+
 
 
 
