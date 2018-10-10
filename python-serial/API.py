@@ -122,6 +122,19 @@ class Claw():
         message = "B:A:{0}:"
         self.ser.write((message.format(speed)).encode())
 
+    def diagnose(self):
+        for name in self.names:
+            print("Running {0} motor".format(name))
+            message = "SET:M:{0}:1:0:50"
+            self.ser.write((message.format(name)).encode())
+            sleep(2)
+            message = "SET:M:{0}:0:1:50"
+            self.ser.write((message.format(name)).encode())
+            sleep(2)
+            print("Stopping {0} motor".format(name))
+            self.stop()
+
+
 
 class CS():
     def __init__(self, ser, names):
@@ -192,6 +205,10 @@ class API():
         print("Sensor Values")
         res = self.cs.get_all()
         res.update(self.us.get_all())
+        print(res)
+        print("Motors")
+        self.wheels.diagnose()
+        self.claw.diagnose()
 
 
 
