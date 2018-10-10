@@ -119,25 +119,30 @@ class API():
 
 
 if __name__ == "__main__":
-    api = API("/dev/ttyACM1")
+    api = API("/dev/ttyACM0")
     print("START")
 
     while True:
 
         try:
-            api.claw.bend_arm(200)
-            sleep(2)
-            api.claw.bend_arm(0)
-            sleep(2)
-            # print("FORWARD")
-            # api.wheels.forward(200)
+            # print(api.cs.get_all())
+            # sleep(1)
+            # api.claw.bend_arm(200)
             # sleep(2)
-            # print("STOP")
-            # api.wheels.stop()
+            # api.claw.bend_arm(0)
             # sleep(2)
-            # print("BACKWARDS")
-            # api.wheels.backwards(200)
-            # sleep(2)
+            print("FORWARD")
+            api.wheels.forward(200)
+            sleep(3)
+            print("STOP")
+            api.wheels.stop()
+            sleep(3)
+            print("BACKWARDS")
+            api.wheels.backwards(200)
+            sleep(3)
+            print("STOP")
+            api.wheels.stop()
+            sleep(3)
             # print("LEFT")
             # api.wheels.left(200)
             # sleep(2)
