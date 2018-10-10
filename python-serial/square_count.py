@@ -1,33 +1,40 @@
-import API 
+import API
 from time import sleep
 
+speed = 100
 api = API.API("/dev/ttyACM0")
-count = 0;
+count = 0
+
+def forward_spaces(spaces, api):
+    count = 0
+    previous = api.cs.get("center")
+    api.wheels.forward(speed)
+    while spaces is not count:
+        check_cs = api.cs.get("center")
+        if(check_cs is not previous):
+            count += 1
+            previous = api.get("center")
+    api.wheels.stop()
+
+def backward_spaces(spaces, api):
+    count = 0
+    previous = api.cs.get("center")
+    api.wheels.backward(speed)
+    while spaces is not count:
+        check_cs = api.cs.get("center")
+        if(check_cs is not previous):
+            count += 1
+            previous = api.get("center")
+    api.wheels.stop()
+
 
 while True:
     try:
         print(api.cs.get_all())
         sleep(1)
-        # print("FORWARD")
-        # ap.wheels.forward(200)
-        # sleep(3)
-        # print("STOP")
-        # ap.wheels.stop()
-        # sleep(3)
-        # print("BACKWARDS")
-        # ap.wheels.backwards(200)
-        # sleep(3)
-        # print("STOP")
-        # ap.wheels.stop()
-        # sleep(3)
-        # # print("LEFT")
-        # # api.wheels.left(200)
-        # # sleep(2)
-        # # print("RIGHT")
-        # # api.wheels.right(200)
-        # # sleep(2)
+
     except KeyboardInterrupt:
-        ap.stop()
+        api.stop()
         sleep(1)
-        ap.ser.close()
+        api.ser.close()
         exit()
