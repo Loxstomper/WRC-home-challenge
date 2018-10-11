@@ -7,7 +7,7 @@ import cv2
 
 def alert(frame):
 	# save image
-	cv2.imwrite("TEST", frame)
+	# cv2.imwrite("TEST", frame)
 	now = datetime.datetime.now()
 	message = "Alert: " + now.strftime("%Y-%m-%d %H:%M:%S")
 

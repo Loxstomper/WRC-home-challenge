@@ -1,6 +1,12 @@
+#include "FastLED.h"
+
 #define NUMBER_US 1
 #define NUMBER_CS 3
 #define NUMBER_MOTORS 5
+#define NUM_LEDS 10
+#define DATA_PIN 3
+
+CRGB leds[NUM_LEDS];
 
 struct Ultrasonic_Sensor
 {
@@ -338,6 +344,32 @@ void open_claw()
   set_motor("claw", 0, 0, 0);
 }
 
+void alarm_leds()
+{
+  for (int i = 0; i < 10; i ++)
+  {
+      for (int j = 0; j < NUM_LEDS; j ++)
+      {
+        leds[j] = CRGB::Red;
+      }
+      
+      FastLED.show();
+      delay(250);
+
+      for (int j = 0; j < NUM_LEDS; j ++)
+      {
+        leds[j] = CRGB::Blue;
+      }
+      
+      FastLED.show();
+      delay(250);    
+  }
+
+  FastLED.clear();
+  FastLED.show();
+
+}
+
 
 void setup()
 {
@@ -352,6 +384,10 @@ void setup()
     arm.claw = motors[4];
 
     setup_pins();
+    FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds, NUM_LEDS);
+    FastLED.setBrightness(32);
+    FastLED.clear();
+    FastLED.show();
 }
 
 void get_args()
@@ -491,6 +527,10 @@ void loop()
         else if ((strcmp("Z", tokens[0])) == 0)
         {
             open_claw();
+        }
+        else if ((strcmp("L", tokens[0])) == 0)
+        {
+            alarm_leds();
         }
     }
 
