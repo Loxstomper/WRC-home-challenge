@@ -4,20 +4,36 @@ import datetime
 import imutils
 import time
 import cv2
-
 import API
+from time import sleep
+from telegram.ext import Updater, CommandHandler
+import telegram
 
 
-def alert(frame):
-	# save image
-	# cv2.imwrite("TEST", frame)
-	now = datetime.datetime.now()
-	message = "Alert: " + now.strftime("%Y-%m-%d %H:%M:%S")
-
+def alert(frames, api, bot, chat_id):
+	now = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+	api.alert_leds()
+	message = "Alert: " + now
 	print(message)
 
+	try:
+		bot.send_message(chat_id=chat_id, text=message)
+	except:
+		print("failed to send to user")
 
-def motion_detection(min_area):
+	for frame in frames:
+		# save image
+		file_path = "./images/" + now + ".jpg"
+		cv2.imwrite(file_path, frame)
+		# send image
+		try:
+			bot.send_photo(chat_id=chat_id, photo=open(file_path, 'rb'))
+		except:
+			print("failed to send image")
+		sleep(1.5)
+
+
+def motion_detection(min_area, api, bot, chat_id):
 	# webcam
 	vs = VideoStream(src=0).start()
 	time.sleep(2.0)
@@ -70,13 +86,46 @@ def motion_detection(min_area):
 			cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 			text = "Occupied"
 
-			alert(frame)
+			frames = []
+
+			cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"),
+				(10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
+
+			frames.append(frame)
+
+			for _ in range(3):
+				frame = vs.read()
+				frame = imutils.resize(frame, width=500)
+
+				cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"),
+					(10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
+
+				frames.append(frame)
+				sleep(0.25)
+
+			alert(frames, api, bot, chat_id)
+
+			# video
+			# height, width, layers = frame.shape
+			# video_out = cv2.VideoWriter('test.avi', -1, -1 (width, height))
+			# video_out = cv2.VideoWriter('test.avi', -1, -1 (500, 500))
+
+			# start_time = time.time()
+			# print("RECORDING VIDEO")
+			# while time.time() - start_time < 5:
+			# 	frame = vs.read()
+			# 	frame = imutils.resize(frame, width=500)
+			# 	video_out.write(frame)
+			# print("FINISHED RECORDING VIDEO")
+
+			# video_out.release()
+
 
 		# draw the text and timestamp on the frame
-		cv2.putText(frame, "Room Status: {}".format(text), (10, 20),
-			cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-		cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"),
-			(10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
+		# cv2.putText(frame, "Room Status: {}".format(text), (10, 20),
+		# 	cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+		# cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"),
+		# 	(10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
 
 		# show the frame and
 		cv2.imshow("Security Feed", frame)
@@ -94,9 +143,33 @@ def motion_detection(min_area):
 	cv2.destroyAllWindows()
 
 
+# telegram bot
+def start(bot, update):
+	bot.send_message(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
+	print(update.message.chat_id)
+
+def send_txt(bot, chat_id, text):
+	bot.send_message(chat_id=chat_id, text=text)
 
 
 if __name__ == "__main__":
-	motion_detection(500)
+	lochie_chat_id = 487912709
+	bot_token = "629389428:AAGeiLSafnaVEwTfqA67TNpNcucnPsE2HTo"
+	updater = Updater(token=bot_token)
+	dispatcher = updater.dispatcher
+	start_handler = CommandHandler('start', start)
+
+	dispatcher.add_handler(start_handler)
+	updater.start_polling()
+
+	bot = telegram.Bot(bot_token)
+	# send_txt(bot, lochie_chat_id, "Homie Bot, at your service!")
+
+	# bot.send_photo(chat_id=lochie_chat_id, photo=open('TEST.jpg', 'rb'))
+	# quit()
+
+	api = API.API("/dev/ttyACM0")
+	# api = None
+	motion_detection(500, api, bot, lochie_chat_id)
 
 
