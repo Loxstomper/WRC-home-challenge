@@ -353,11 +353,11 @@ void open_claw()
 void grab()
 {
     set_motor("claw", 0, 1, 200);
-    delay(500);
+    delay(250);
     set_motor("claw", 0, 0, 0);
 
-    set_motor("first", 0, 1, 200);
-    delay(2500);
+    set_motor("first", 0, 1, 255);
+    delay(1500);
     set_motor("first", 0, 0, 0);
 
     set_motor("second", 0, 1, 200);
