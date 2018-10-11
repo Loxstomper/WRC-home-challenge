@@ -210,6 +210,10 @@ class API():
         self.wheels.diagnose()
         self.claw.diagnose()
 
+    def alert_leds(self):
+        message = "L:"
+        self.ser.write(message.encode())
+
 
 
 
