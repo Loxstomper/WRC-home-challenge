@@ -3,8 +3,8 @@
 #define NUMBER_US 1
 #define NUMBER_CS 3
 #define NUMBER_MOTORS 5
-#define NUM_LEDS 10
-#define DATA_PIN 3
+#define NUM_LEDS 33
+#define DATA_PIN 8 
 
 CRGB leds[NUM_LEDS];
 
