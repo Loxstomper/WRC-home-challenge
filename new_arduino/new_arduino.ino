@@ -325,12 +325,18 @@ void bend_arm(int speed)
 
 void drop_arm()
 {
-    set_motor("first", 1, 0, 200);
+    set_motor("first", 1, 0, 220);
     delay(1700);
     set_motor("first", 0, 0, 0);
+
+    set_motor("claw", 1, 0, 200);
+    delay(1000);
+    set_motor("claw", 0, 0, 0);
+
     set_motor("second", 1, 0, 200);
     delay(2100);
     set_motor("second", 0, 0, 0);
+
     //delay(500);
     set_motor("second", 0, 1, 100);
     delay(1000);
@@ -339,9 +345,24 @@ void drop_arm()
 
 void open_claw()
 {
-  set_motor("claw", 1, 0, 200);
-  delay(1000);
-  set_motor("claw", 0, 0, 0);
+    set_motor("claw", 1, 0, 200);
+    delay(1000);
+    set_motor("claw", 0, 0, 0);
+}
+
+void grab()
+{
+    set_motor("claw", 0, 1, 200);
+    delay(250);
+    set_motor("claw", 0, 0, 0);
+
+    set_motor("first", 0, 1, 255);
+    delay(1500);
+    set_motor("first", 0, 0, 0);
+
+    set_motor("second", 0, 1, 200);
+    delay(1000);
+    set_motor("second", 0, 0, 0);
 }
 
 void alarm_leds()
@@ -352,7 +373,7 @@ void alarm_leds()
       {
         leds[j] = CRGB::Red;
       }
-      
+
       FastLED.show();
       delay(250);
 
@@ -360,9 +381,9 @@ void alarm_leds()
       {
         leds[j] = CRGB::Blue;
       }
-      
+
       FastLED.show();
-      delay(250);    
+      delay(250);
   }
 
   FastLED.clear();
@@ -520,17 +541,21 @@ void loop()
                 bend_arm(atoi(tokens[2]));
             }
         }
-        else if ((strcmp("S", tokens[0])) == 0)
+        else if ((strcmp("DROP", tokens[0])) == 0)
         {
             drop_arm();
         }
-        else if ((strcmp("Z", tokens[0])) == 0)
+        else if ((strcmp("OPEN", tokens[0])) == 0)
         {
             open_claw();
         }
-        else if ((strcmp("L", tokens[0])) == 0)
+        else if ((strcmp("ALARM", tokens[0])) == 0)
         {
             alarm_leds();
+        }
+        else if((strcmp("GRAB", tokens[0])) == 0)
+        {
+            grab();
         }
     }
 

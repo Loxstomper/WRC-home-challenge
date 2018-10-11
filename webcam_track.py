@@ -77,6 +77,9 @@ while True:
 
     # we are doing a 680x480 video
 
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
     # straight ahead
     if center is not None and center[0] in range(screen_mid[0] - thresholds[0], screen_mid[0] + thresholds[1]):
         print("FORWRD")
@@ -93,9 +96,6 @@ while True:
     else:
         print("CANT FIND TURNING LEFT")
         continue
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
 
 webcam.release()
 cv2.destroyAllWindows()
