@@ -91,8 +91,6 @@ class Wheels():
             self.stop()
 
 
-
-
 class Claw():
     def __init__(self, ser, names):
         self.ser = ser
@@ -121,6 +119,14 @@ class Claw():
     def bend_arm(self, speed):
         message = "B:A:{0}:"
         self.ser.write((message.format(speed)).encode())
+
+    def drop_arm(self):
+        message = "DROP:"
+        self.ser.write((message.format().encode()))
+
+    def grab(self):
+        message = "GRAB:"
+        self.ser.write((message.format().encode()))
 
     def diagnose(self):
         for name in self.names:
