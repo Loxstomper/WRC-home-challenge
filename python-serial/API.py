@@ -1,6 +1,78 @@
+import cv2
+import numpy as np
+from collections import deque
+import imutils
 import serial
 from time import sleep
+from enum import Enum
 import sys
+
+
+class Direction(Enum):
+    forward = 1
+    left = 2
+    right = 3
+    backward = 4
+
+class Camera():
+    def __init__(self):
+        try:
+            self.camera = cv2.VideoCapture(0)
+        except:
+            print("Cannot get camera")
+            self.camera = None
+
+    def locateColor(self, color_range):
+        # the range of the color we want to find
+        lower = color_range[0]
+        upper = color_range[1]
+
+        center = (0,0)
+
+        # reading the camera
+        ret, frame = self.camera.read()
+
+        # creates a normal frame and a hsv frame
+        frame = imutils.resize(frame, width=600)
+        blurred = cv2.GaussianBlur(frame, (11, 11), 0)
+        hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
+
+        # mask
+        mask = cv2.inRange(hsv, lower, upper)
+        mask = cv2.erode(mask, None, iterations=2)
+        mask = cv2.dilate(mask, None, iterations=2)
+
+        # creates a frame that only shows the color we want to find
+        res = cv2.bitwise_and(frame, frame, mask=mask)
+
+        # find contours in the mask and initialize the current
+        # (x, y) center of the ball
+        cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cnts = cnts[0] if imutils.is_cv2() else cnts[1]
+        center = None
+
+        if len(cnts) > 0:
+            # find the largest contour in the mask, then use
+            # it to compute the minimum enclosing circle and
+            # centroid
+            c = max(cnts, key=cv2.contourArea)
+            ((x, y), radius) = cv2.minEnclosingCircle(c)
+            M = cv2.moments(c)
+            center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+
+            # only proceed if the radius meets a minimum size
+            if radius > 10:
+                # draw the circle and centroid on the frame,
+                # then update the list of tracked points
+                cv2.circle(frame, (int(x), int(y)), int(radius),
+                           (0, 255, 255), 2)
+                cv2.circle(frame, center, 5, (0, 0, 255), -1)
+
+            cv2.imshow('mask', mask)
+            cv2.imshow('res', res)
+            cv2.imshow('webcam', frame)
+
+        return center
 
 
 class Wheels():
@@ -141,7 +213,6 @@ class Claw():
             self.stop()
 
 
-
 class CS():
     def __init__(self, ser, names):
         self.ser = ser
@@ -199,6 +270,8 @@ class API():
         self.claw = Claw(self.ser, self.claw_names)
         self.cs = CS(self.ser, self.CS_names)
         self.us = US(self.ser, self.US_names)
+        self.camera = Camera(self)
+        self.direction = Direction.forward
         sleep(2)
         print("API created")
 
@@ -221,40 +294,17 @@ class API():
         self.ser.write(message.encode())
 
 
-
-
-
 if __name__ == "__main__":
     api = API("/dev/ttyACM0")
     print("START")
+    green_lower = np.array([40, 180, 20])
+    green_upper = np.array([255, 255, 255])
+    green = (green_lower, green_upper)
+    api.camera.locateColor(green)
 
     while True:
-
         try:
-            # print(api.cs.get_all())
-            # sleep(1)
-            # api.claw.bend_arm(200)
-            # sleep(2)
-            # api.claw.bend_arm(0)
-            # sleep(2)
-            print("FORWARD")
-            api.wheels.forward(255)
-            sleep(3)
-            print("STOP")
-            api.wheels.stop()
-            sleep(3)
-            print("BACKWARDS")
-            api.wheels.backwards(255)
-            sleep(3)
-            print("STOP")
-            api.wheels.stop()
-            sleep(3)
-            # print("LEFT")
-            # api.wheels.left(200)
-            # sleep(2)
-            # print("RIGHT")
-            # api.wheels.right(200)
-            # sleep(2)
+            pass
         except KeyboardInterrupt:
             api.stop()
             sleep(1)
