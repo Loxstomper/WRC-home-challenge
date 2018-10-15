@@ -5,14 +5,14 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_HMC5883_U.h>
 
-#define NUMBER_US 1
+#define NUMBER_US 3 
 #define NUMBER_CS 3
 #define NUMBER_MOTORS 5
 #define NUM_LEDS 33
 #define DATA_PIN 8
 
+// globals
 Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
-
 CRGB leds[NUM_LEDS];
 
 struct Ultrasonic_Sensor
@@ -157,7 +157,6 @@ void poll_cs()
 
     for (i = 0; i < NUMBER_CS; i ++)
     {
-        /* just randomly generating */
         cs[i].value = analogRead(cs[i].pin);
     }
 }
@@ -169,8 +168,6 @@ void poll_us()
 
     for (i = 0; i < NUMBER_US; i ++)
     {
-        /* just randomly generating */
-        //us[i].value = rand() % 100;
         digitalWrite(us[i].trig, LOW);
         delayMicroseconds(2);
         digitalWrite(us[i].trig, HIGH);
@@ -472,6 +469,7 @@ void alarm_leds()
 void setup()
 {
     Serial.begin(9600);
+    compassSetup();
 
     // put your setup code here, to run once:
     wheels.left = motors[0];
