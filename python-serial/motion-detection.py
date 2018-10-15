@@ -10,9 +10,11 @@ from telegram.ext import Updater, CommandHandler
 import telegram
 
 
+is_armed = False
+
 def alert(frames, api, bot, chat_id):
 	now = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-	api.alert_leds()
+	# api.alert_leds()
 	message = "Alert: " + now
 	print(message)
 
@@ -34,6 +36,7 @@ def alert(frames, api, bot, chat_id):
 
 
 def motion_detection(min_area, api, bot, chat_id):
+	global is_armed
 	# webcam
 	vs = VideoStream(src=0).start()
 	time.sleep(2.0)
@@ -46,6 +49,10 @@ def motion_detection(min_area, api, bot, chat_id):
 
 	# loop over the frames of the video
 	while True:
+		# only do vision if camera is armed
+		if not is_armed:
+			firstFrame = None
+			continue
 		# grab the current frame and initialize the occupied/unoccupied
 		# text
 		frame = vs.read()
@@ -151,6 +158,29 @@ def start(bot, update):
 def send_txt(bot, chat_id, text):
 	bot.send_message(chat_id=chat_id, text=text)
 
+def arm(bot, update):
+	global is_armed
+	
+	if is_armed:
+		bot.send_message(chat_id=update.message.chat_id, text="I am already armed")
+	else:
+		is_armed = True
+		bot.send_message(chat_id=update.message.chat_id, text="I am now armed")
+
+def disarm(bot, update):
+	global is_armed
+	
+	if is_armed:
+		is_armed = False
+		bot.send_message(chat_id=update.message.chat_id, text="I am now disarmed")
+	else:
+		bot.send_message(chat_id=update.message.chat_id, text="I am already disarmed")
+
+def help(bot, update):
+	message = "Once armed if motion is detected an alert will be sent via message including pictures with time stamps and the LEDs will light up too.\n /arm arms Homie Bot\n/disarm disarms Homie Bot\n/help this menu"
+	bot.send_message(chat_id=update.message.chat_id, text=message)
+
+
 
 if __name__ == "__main__":
 	lochie_chat_id = 487912709
@@ -160,16 +190,19 @@ if __name__ == "__main__":
 	start_handler = CommandHandler('start', start)
 
 	dispatcher.add_handler(start_handler)
+	dispatcher.add_handler(CommandHandler('arm', arm))
+	dispatcher.add_handler(CommandHandler('disarm', disarm))
+	dispatcher.add_handler(CommandHandler('help', help))
 	updater.start_polling()
 
 	bot = telegram.Bot(bot_token)
-	# send_txt(bot, lochie_chat_id, "Homie Bot, at your service!")
+	send_txt(bot, lochie_chat_id, "Homie Bot, at your service!\ntype /help for information")
 
 	# bot.send_photo(chat_id=lochie_chat_id, photo=open('TEST.jpg', 'rb'))
 	# quit()
 
-	api = API.API("/dev/ttyACM0")
-	# api = None
+	# api = API.API("/dev/ttyACM0")
+	api = None
 	motion_detection(500, api, bot, lochie_chat_id)
 
 

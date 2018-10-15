@@ -311,6 +311,10 @@ void turn_left(int speed)
     while(current_angle - desired_angle > 10.0) 
     {
         current_angle = get_angle();
+<<<<<<< HEAD
+=======
+        Serial.print("Current angle: "); Serial.println(current_angle);
+>>>>>>> 63a408228df0a4a36220b1b33c0d9551afb28c96
         delay(100);
     }
 
