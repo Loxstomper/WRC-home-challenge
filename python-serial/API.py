@@ -151,16 +151,37 @@ class Wheels():
         self.stop()
 
     def diagnose(self):
-        for name in self.names:
-            print("Running {0} wheel".format(name))
-            message = "SET:M:{0}:1:0:100"
-            self.ser.write((message.format(name)).encode())
-            sleep(2)
-            message = "SET:M:{0}:0:1:100"
-            self.ser.write((message.format(name)).encode())
-            sleep(2)
-            print("Stopping {0} wheel".format(name))
-            self.stop()
+        print("Forward")
+        self.forward(100)
+        sleep(1)
+        self.stop()
+        
+        print("Backward")
+        self.backward(100)
+        sleep(1)
+        self.stop()
+
+        print("Left")
+        self.left(100)
+        sleep(1)
+        
+        print("Right")
+        self.right(100)
+        sleep()
+
+        print("Stop")
+        self.stop()
+
+        # for name in names
+            # print("Running {0} wheel".format(name))
+            # message = "SET:M:{0}:1:0:100"
+            # self.ser.write((message.format(name)).encode())
+            # sleep(2)
+            # message = "SET:M:{0}:0:1:100"
+            # self.ser.write((message.format(name)).encode())
+            # sleep(2)
+            # print("Stopping {0} wheel".format(name))
+            # self.stop()
 
 
 class Claw():
@@ -201,16 +222,17 @@ class Claw():
         self.ser.write((message.format().encode()))
 
     def diagnose(self):
-        for name in self.names:
-            print("Running {0} motor".format(name))
-            message = "SET:M:{0}:1:0:50"
-            self.ser.write((message.format(name)).encode())
-            sleep(2)
-            message = "SET:M:{0}:0:1:50"
-            self.ser.write((message.format(name)).encode())
-            sleep(2)
-            print("Stopping {0} motor".format(name))
-            self.stop()
+        pass
+        # for name in self.names:
+        #     print("Running {0} motor".format(name))
+        #     message = "SET:M:{0}:1:0:50"
+        #     self.ser.write((message.format(name)).encode())
+        #     sleep(2)
+        #     message = "SET:M:{0}:0:1:50"
+        #     self.ser.write((message.format(name)).encode())
+        #     sleep(2)
+        #     print("Stopping {0} motor".format(name))
+        #     self.stop()
 
 
 class CS():
@@ -281,12 +303,17 @@ class API():
 
     def diagnostics(self):
         print("Running Diagnostic")
-        print("Sensor Values")
-        res = self.cs.get_all()
-        res.update(self.us.get_all())
-        print(res)
-        print("Motors")
+
+        print("Colour Sensor Values")
+        print(self.cs.get_all())
+
+        print("Ultrasonic Sensor values")
+        print(self.us.get_all())
+
+        print("Wheels")
         self.wheels.diagnose()
+
+        print("Claw")
         self.claw.diagnose()
 
     def alert_leds(self):
@@ -297,6 +324,10 @@ class API():
 if __name__ == "__main__":
     api = API("/dev/ttyACM0")
     print("START")
+    print("DIAGONSTIC")
+
+    api.diagnostics()
+
     green_lower = np.array([40, 180, 20])
     green_upper = np.array([255, 255, 255])
     green = (green_lower, green_upper)
