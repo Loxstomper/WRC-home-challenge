@@ -153,21 +153,21 @@ class Wheels():
     def diagnose(self):
         print("Forward")
         self.forward(100)
-        sleep(1)
+        sleep(2)
         self.stop()
         
         print("Backward")
         self.backward(100)
-        sleep(1)
+        sleep(2)
         self.stop()
 
         print("Left")
         self.left(100)
-        sleep(1)
+        sleep(2)
         
         print("Right")
         self.right(100)
-        sleep()
+        sleep(2)
 
         print("Stop")
         self.stop()
@@ -292,7 +292,7 @@ class API():
         self.claw = Claw(self.ser, self.claw_names)
         self.cs = CS(self.ser, self.CS_names)
         self.us = US(self.ser, self.US_names)
-        self.camera = Camera(self)
+        self.camera = Camera()
         self.direction = Direction.forward
         sleep(2)
         print("API created")

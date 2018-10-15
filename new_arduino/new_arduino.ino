@@ -293,8 +293,12 @@ void move_backwards(int speed)
 
 void turn_left(int speed)
 {
+    Serial.println("Turning Left");
     float current_angle = get_angle();
     float desired_angle = current_angle - 90; //turning left is negative
+
+    Serial.print("Current angle: "); Serial.println(current_angle);
+
 
     // Correct for when signs are reversed.
     if(desired_angle < 0)
@@ -303,14 +307,18 @@ void turn_left(int speed)
     // Check for wrap due to addition of declination.
     if(desired_angle > 2*PI)
       desired_angle -= 2*PI;  
+
+    Serial.print("Desired angle: "); Serial.println(desired_angle);
     
     set_motor("left", 0, 0, 0);
     set_motor("right", 0, 1, speed);
     
     while(abs(current_angle - desired_angle) > 2.5)
     {
+        Serial.print("Difference: "); Serial.println(abs(current_angle - desired_angle));
         current_angle = get_angle();
-        delay(100);
+        Serial.print("Current angle: "); Serial.println(current_angle);
+        delay(250);
     }
 
     set_motor("right", 0, 0, 0);
