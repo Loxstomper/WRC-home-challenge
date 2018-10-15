@@ -318,7 +318,7 @@ void turn_left(int speed)
         Serial.print("Difference: "); Serial.println(abs(current_angle - desired_angle));
         current_angle = get_angle();
         Serial.print("Current angle: "); Serial.println(current_angle);
-        delay(250);
+        delay(100);
     }
 
     set_motor("right", 0, 0, 0);
