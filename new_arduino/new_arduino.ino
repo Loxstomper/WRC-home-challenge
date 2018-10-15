@@ -1,10 +1,17 @@
 #include "FastLED.h"
 
+// for compass
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_HMC5883_U.h>
+
 #define NUMBER_US 1
 #define NUMBER_CS 3
 #define NUMBER_MOTORS 5
 #define NUM_LEDS 33
-#define DATA_PIN 8 
+#define DATA_PIN 8
+
+Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
 
 CRGB leds[NUM_LEDS];
 
@@ -213,6 +220,38 @@ int get_button()
     return 1;
 }
 
+void compassSetup()
+{
+    if(!mag.begin())
+    {
+        /* There was a problem detecting the HMC5883 ... check your connections */
+        Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
+        while(1);
+    }
+}
+
+float get_angle()
+{
+    sensors_event_t event; 
+    mag.getEvent(&event);
+
+    float heading = atan2(event.magnetic.y, event.magnetic.x);
+    float declinationAngle = -0.122173 + 2*PI; // for tokyo
+
+    // Correct for when signs are reversed.
+    if(heading < 0)
+      heading += 2*PI;
+    
+    // Check for wrap due to addition of declination.
+    if(heading > 2*PI)
+      heading -= 2*PI;
+   
+    // Convert radians to degrees for readability.
+    float headingDegrees = heading * 180/M_PI; 
+
+    return headingDegrees;
+}
+
 /* sets motor speed and a/b pins */
 void set_motor(char* name, int a_val, int b_val, int val)
 {
@@ -257,14 +296,52 @@ void move_backwards(int speed)
 
 void turn_left(int speed)
 {
+    float current_angle = get_angle();
+    float desired_angle = current_angle - 90; //turning left is negative
+
+    // Correct for when signs are reversed.
+    if(desired_angle < 0)
+      desired_angle += 2*PI;
+    
+    // Check for wrap due to addition of declination.
+    if(desired_angle > 2*PI)
+      desired_angle -= 2*PI;  
+    
     set_motor("left", 0, 0, 0);
     set_motor("right", 0, 1, speed);
+    
+    while(abs(current_angle - desired_angle) > 2.5)
+    {
+        current_angle = get_angle();
+        delay(100);
+    }
+
+    set_motor("right", 0, 0, 0);
 }
 
 void turn_right(int speed)
 {
-    set_motor("left", 1, 0, speed);
-    set_motor("right", 0, 0, 0);
+    float current_angle = get_angle();
+    float desired_angle = current_angle + 90; //turning right is positive
+
+    // Correct for when signs are reversed.
+    if(desired_angle < 0)
+      desired_angle += 2*PI;
+    
+    // Check for wrap due to addition of declination.
+    if(desired_angle > 2*PI)
+      desired_angle -= 2*PI;  
+    
+    set_motor("left", 0, 1, 0);
+    set_motor("right", 0, 0, speed);
+    
+    while(abs(current_angle - desired_angle) > 2.5)
+    {
+        current_angle = get_angle();
+        delay(100);
+    }
+
+    set_motor("left", 0, 0, 0);
 }
 
 void move_back(int speed)
