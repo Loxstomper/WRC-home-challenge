@@ -92,8 +92,7 @@ Button button;
 char buffer[64];
 char tokens[10][10];
 
-void setup_pins()
-{
+void setup_pins()p
     /* iterate over motors */
     for (int i = 0; i < NUMBER_MOTORS; i ++)
     {
@@ -297,24 +296,26 @@ void move_backwards(int speed)
 
 void turn_left(int speed)
 {
+    Serial.println("Turning Left");
+
     float current_angle = get_angle();
+    Serial.println(current_angle);
     float desired_angle = current_angle - 90.0; //turning left is negative
+    Serial.println(desired_angle);
 
     if (desired_angle < 0)
     {
         desired_angle += 360;
+        Serial.println(desired_angle);
     }
     
     set_motor("left", 0, 0, 0);
     set_motor("right", 0, 1, speed);
     
-    while(current_angle - desired_angle > 10.0) 
+    while(abs(desired_angle - current_angle) > 10.0) 
     {
         current_angle = get_angle();
-<<<<<<< HEAD
-=======
-        Serial.print("Current angle: "); Serial.println(current_angle);
->>>>>>> 63a408228df0a4a36220b1b33c0d9551afb28c96
+        Serial.println(current_angle);
         delay(100);
     }
 
@@ -325,6 +326,8 @@ void turn_left(int speed)
 
 void turn_right(int speed)
 {
+    Serial.println("Turning Right");
+    
     float current_angle = get_angle();
     float desired_angle = current_angle + 90.0; //turning left is negative
 
@@ -336,9 +339,10 @@ void turn_right(int speed)
     set_motor("left", 0, 0, 0);
     set_motor("right", 0, 1, speed);
     
-    while(current_angle - desired_angle > 10.0) 
+    while(abs(current_angle - desired_angle) > 10.0) 
     {
         current_angle = get_angle();
+        Serial.println(current_angle);
         delay(100);
     }
 
