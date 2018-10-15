@@ -225,6 +225,8 @@ void compassSetup()
         Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
         while(1);
     }
+
+    Serial.println("Compass is set Up");
 }
 
 float get_angle()
@@ -233,7 +235,7 @@ float get_angle()
     mag.getEvent(&event);
 
     float heading = atan2(event.magnetic.y, event.magnetic.x);
-    float declinationAngle = -0.122173 + 2*PI; // for tokyo
+    float declinationAngle = 0.122173; // for tokyo
 
     // Correct for when signs are reversed.
     if(heading < 0)
@@ -291,35 +293,28 @@ void move_backwards(int speed)
     set_motor("right", 1, 0, speed);
 }
 
+// for turn left and right functions maybe get the intial average just in case one is outlier
+
 void turn_left(int speed)
 {
-    Serial.println("Turning Left");
     float current_angle = get_angle();
-    float desired_angle = current_angle - 90; //turning left is negative
+    float desired_angle = current_angle - 90.0; //turning left is negative
 
-    Serial.print("Current angle: "); Serial.println(current_angle);
-
-
-    // Correct for when signs are reversed.
-    if(desired_angle < 0)
-      desired_angle += 2*PI;
-    
-    // Check for wrap due to addition of declination.
-    if(desired_angle > 2*PI)
-      desired_angle -= 2*PI;  
-
-    Serial.print("Desired angle: "); Serial.println(desired_angle);
+    if (desired_angle < 0)
+    {
+        desired_angle += 360;
+    }
     
     set_motor("left", 0, 0, 0);
     set_motor("right", 0, 1, speed);
     
-    while(abs(current_angle - desired_angle) > 2.5)
+    while(current_angle - desired_angle > 10.0) 
     {
-        Serial.print("Difference: "); Serial.println(abs(current_angle - desired_angle));
         current_angle = get_angle();
-        Serial.print("Current angle: "); Serial.println(current_angle);
-        delay(250);
+        delay(100);
     }
+
+    Serial.println("DONE");
 
     set_motor("right", 0, 0, 0);
 }
@@ -327,26 +322,25 @@ void turn_left(int speed)
 void turn_right(int speed)
 {
     float current_angle = get_angle();
-    float desired_angle = current_angle + 90; //turning right is positive
+    float desired_angle = current_angle + 90.0; //turning left is negative
 
-    // Correct for when signs are reversed.
-    if(desired_angle < 0)
-      desired_angle += 2*PI;
+    if (desired_angle > 360.0 )
+    {
+        desired_angle -= 360.0;
+    }
     
-    // Check for wrap due to addition of declination.
-    if(desired_angle > 2*PI)
-      desired_angle -= 2*PI;  
+    set_motor("left", 0, 0, 0);
+    set_motor("right", 0, 1, speed);
     
-    set_motor("left", 0, 1, 0);
-    set_motor("right", 0, 0, speed);
-    
-    while(abs(current_angle - desired_angle) > 2.5)
+    while(current_angle - desired_angle > 10.0) 
     {
         current_angle = get_angle();
         delay(100);
     }
 
-    set_motor("left", 0, 0, 0);
+    Serial.println("DONE");
+
+    set_motor("right", 0, 0, 0);
 }
 
 void move_back(int speed)
