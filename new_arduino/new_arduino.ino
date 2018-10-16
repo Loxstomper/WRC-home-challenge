@@ -92,7 +92,8 @@ Button button;
 char buffer[64];
 char tokens[10][10];
 
-void setup_pins()p
+void setup_pins()
+{
     /* iterate over motors */
     for (int i = 0; i < NUMBER_MOTORS; i ++)
     {
@@ -114,7 +115,7 @@ void setup_pins()p
     }
 
     /* interate over ultrasonic sensors */
-    for (int i = 0; i < NUMBER_US; i ++)
+    for(int i = 0; i < NUMBER_US; i ++)
     {
       pinMode(us[i].trig, OUTPUT);
       pinMode(us[i].echo, INPUT);
@@ -473,6 +474,45 @@ void alarm_leds()
   FastLED.clear();
   FastLED.show();
 
+}
+
+void test()
+{
+    int value;
+    
+    Serial.println("-------- Moving Motors --------");
+    // iterate through motors
+    for (int i = 0; i < NUMBER_MOTORS; i ++)
+    {
+        Serial.print("Moving motor: ");Serial.print(motors[i].name);
+        set_motor(motors[i].name, 1, 0, 200);
+        delay(500);
+        set_motor(motors[i].name, 0, 1, 200);
+        delay(500);
+        set_motor(motors[i].name, 0, 0, 0);
+    }
+
+    Serial.println("-------- Printing CS --------");
+
+    /* iterate over colour sensors */
+    for (int i = 0; i < NUMBER_CS; i ++)
+    {
+        value = get_cs(cs[i].name);
+        Serial.print("Value of CS: ");Serial.print(cs[i].name);Serial.print(" = ");Serial.println(value);
+        delay(100);
+    }
+
+    Serial.println("-------- Printing US --------");
+
+    /* interate over ultrasonic sensors */
+    for (int i = 0; i < NUMBER_US; i ++)
+    {
+        value = get_us(us[i].name);
+        Serial.print("Value of US: ");Serial.print(us[i].name);Serial.print(" = ");Serial.println(value);        
+        delay(100);
+    }
+
+        
 }
 
 
