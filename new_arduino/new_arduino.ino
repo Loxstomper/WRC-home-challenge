@@ -337,8 +337,8 @@ void turn_right(int speed)
         desired_angle -= 360.0;
     }
     
-    set_motor("left", 0, 0, 0);
-    set_motor("right", 0, 1, speed);
+    set_motor("left", 1, 0, speed);
+    set_motor("right", 0, 0, 0);
     
     while(abs(current_angle - desired_angle) > 10.0) 
     {
@@ -349,7 +349,7 @@ void turn_right(int speed)
 
     Serial.println("DONE");
 
-    set_motor("right", 0, 0, 0);
+    set_motor("left", 0, 0, 0);
 }
 
 void move_back(int speed)
@@ -513,6 +513,18 @@ void test()
     }
 
         
+}
+
+void collision()
+{
+    float US_values[NUMBER_US];
+    for(int i = 0; i<NUMBER_US; i++)
+    {
+        US_values[i] = get_us(us[i].name);
+    }
+
+    
+    
 }
 
 
@@ -682,6 +694,11 @@ void loop()
         {
             grab();
         }
+        else if((strcmp("TEST", tokens[0])) == 0)
+        {
+            test();
+        }
+        
     }
 
     //   Serial.println("US");
