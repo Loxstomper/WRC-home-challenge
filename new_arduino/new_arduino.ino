@@ -484,11 +484,11 @@ void test()
     // iterate through motors
     for (int i = 0; i < NUMBER_MOTORS; i ++)
     {
-        Serial.print("Moving motor: ");Serial.print(motors[i].name);
-        set_motor(motors[i].name, 1, 0, 200);
-        delay(500);
-        set_motor(motors[i].name, 0, 1, 200);
-        delay(500);
+        Serial.print("Moving motor: ");Serial.println(motors[i].name);
+        set_motor(motors[i].name, 1, 0, 150);
+        delay(1000);
+        set_motor(motors[i].name, 0, 1, 150);
+        delay(1000);
         set_motor(motors[i].name, 0, 0, 0);
     }
 
@@ -525,7 +525,39 @@ void collision()
     }
     Serial.println("-----------------------------------");
 
-    
+    if(US_values[1] < 30.0 && US_values[1] > 10.0) // centre US is close to object but can still turn right or left
+    {
+        if(US_values[0] > US_values[2])
+        {
+            turn_left(150); 
+        }
+        else
+        {
+            turn_right(150);
+        }
+    }
+    else if(US_values[1] < 10.0)
+    {
+        move_backwards(150);
+        delay(1000);
+        move_backwards(150);
+
+        for(int i = 0; i<NUMBER_US; i++)
+        {
+            US_values[i] = get_us(us[i].name);
+            Serial.print("US: "); Serial.print(us[i].name);Serial.print(" = ");Serial.println(US_values[i]);
+        }
+        Serial.println("-----------------------------------");
+
+        if(US_values[0] > US_values[2])
+        {
+            turn_left(150); 
+        }
+        else
+        {
+            turn_right(150);
+        }
+    }
 }
 
 
