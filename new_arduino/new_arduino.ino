@@ -521,9 +521,10 @@ void collision()
     for(int i = 0; i<NUMBER_US; i++)
     {
         US_values[i] = get_us(us[i].name);
+        Serial.print("US: "); Serial.print(us[i].name);Serial.print(" = ");Serial.println(US_values[i]);
     }
+    Serial.println("-----------------------------------");
 
-    
     
 }
 
@@ -694,10 +695,15 @@ void loop()
         {
             grab();
         }
+        else if((strcmp("COLLISION", tokens[0])) == 0)
+        {
+            collision();
+        }
         else if((strcmp("TEST", tokens[0])) == 0)
         {
             test();
         }
+        
         
     }
 
