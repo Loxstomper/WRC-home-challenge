@@ -86,7 +86,7 @@ def pick1():
 
     while(finished == 0):
         api.collision()
-        color = api.cs.get(centre)
+        color = api.cs.get(center)
         center = api.camera.locateColor(blue)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
