@@ -27,23 +27,29 @@ while(1):
     # straight ahead
     if location is not None and location[0] in range(screen_mid[0] - thresholds[0], screen_mid[0] + thresholds[1]):
         if direction is not Direction.forward:
-            api.wheels
-        print("FORWARD")
-        api.wheels.forward(200)
+            api.stop()
+            print("FORWARD")
+            api.wheels.forward(200)
 
 
     elif location is not None and location[0] in range(0, screen_mid[0] - thresholds[0]):
-        print("TURN RIGHT")
-        api.send_message("SET:M:right:1:0:150")
+        if direction is not Direction.right:
+            api.stop()
+            print("TURN RIGHT")
+            api.send_message("SET:M:right:1:0:150")
 
 
     elif location is not None and location[0] in range(screen_mid[0] + thresholds[0], width):
-        print("TURN LEFT")
-        api.send_message("SET:M:left:1:0:150")
+        if direction is not Direction.left:
+            api.stop()
+            print("TURN LEFT")
+            api.send_message("SET:M:left:1:0:150")
 
     else:
-        print("CANT FIND TURNING LEFT")
-        api.send_message("SET:M:left:1:0:150")
+        if direction is not Direction.left:
+            api.stop()
+            print("CANNOT FIND, TURN LEFT")
+            api.send_message("SET:M:left:1:0:150")
 
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
