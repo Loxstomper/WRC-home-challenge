@@ -65,6 +65,31 @@ class Camera():
 
         return center
 
+    def locateImage(self, source, template):
+        import cv2
+
+        img = cv2.imread(source, 0)  # source image
+        img2 = img.copy()
+        template = cv2.imread(template, 0)  # template
+        w, h = template.shape[::-1]
+
+        # All the 6 methods for comparison in a list
+        methodName = 'cv2.TM_CCOEFF_NORMED'
+
+        img = img2.copy()
+        method = eval(methodName)
+
+        # Apply template Matching
+        res = cv2.matchTemplate(img, template, method)
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+
+        top_left = max_loc
+        bottom_right = (top_left[0] + w, top_left[1] + h)
+
+
+
+
+
 
 class Wheels():
     def __init__(self, ser, names):
@@ -284,7 +309,6 @@ class API():
         self.cs = CS(self.ser, self.CS_names)
         self.us = US(self.ser, self.US_names)
         self.camera = Camera()
-        self.direction = Direction.forward
         sleep(2)
         print("API created")
 

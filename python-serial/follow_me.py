@@ -10,7 +10,6 @@ class Direction(Enum):
     right = 3
     backward = 4
 
-BLACK_HSV = ()
 api = API("/dev/ttyACM0")
 
 # thresholds pixel
@@ -20,9 +19,10 @@ height = 480
 screen_mid = (width // 2, height // 2)
 
 direction = Direction.forward
+api.wheels.forward(200)
 
 while(1):
-    location = api.camera.locateColor(BLACK_HSV)
+    location = 0
 
     # straight ahead
     if location is not None and location[0] in range(screen_mid[0] - thresholds[0], screen_mid[0] + thresholds[1]):
