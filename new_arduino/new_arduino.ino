@@ -219,14 +219,7 @@ int get_button()
 
 void compassSetup()
 {
-    if(!mag.begin())
-    {
-        /* There was a problem detecting the HMC5883 ... check your connections */
-        Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
-        while(1);
-    }
-
-    Serial.println("Compass is set Up");
+    mag.begin();
 }
 
 float get_angle()
@@ -410,7 +403,7 @@ void bend_arm(int speed)
 
 void drop_arm()
 {
-    set_motor("first", 1, 0, 220);
+    set_motor("first", 1, 0, 250);
     delay(1700);
     set_motor("first", 0, 0, 0);
 
@@ -529,11 +522,11 @@ void collision()
     {
         if(US_values[0] > US_values[2])
         {
-            turn_left(150); 
+            turn_left(150, 90); 
         }
         else
         {
-            turn_right(150);
+            turn_right(150, 90);
         }
     }
     else if(US_values[1] < 10.0)
@@ -551,11 +544,11 @@ void collision()
 
         if(US_values[0] > US_values[2])
         {
-            turn_left(150); 
+            turn_left(150, 90); 
         }
         else
         {
-            turn_right(150);
+            turn_right(150, 90);
         }
     }
 }

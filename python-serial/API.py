@@ -87,10 +87,6 @@ class Camera():
         bottom_right = (top_left[0] + w, top_left[1] + h)
 
 
-
-
-
-
 class Wheels():
     def __init__(self, ser, names):
         self.ser = ser
@@ -333,6 +329,10 @@ class API():
 
     def alert_leds(self):
         message = "L:"
+        self.ser.write(message.encode())
+
+    def collision(self):
+        message = "COLLISION:"
         self.ser.write(message.encode())
 
     def send_message(self, message):

@@ -13,8 +13,8 @@ center = (0, 0)
 # green_lower = np.array([120, 80, 20])
 # green_upper = np.array([120, 140, 20])
 # green_lower = np.array([180, 60, 40])
-green_lower = np.array([40, 180, 20])
-green_upper = np.array([255, 255, 255])
+green_lower = np.array([170,50,50])
+green_upper = np.array([180,255,255])
 
 # thresholds pixel
 thresholds = (40, 50)
