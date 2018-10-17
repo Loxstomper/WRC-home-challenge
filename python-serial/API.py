@@ -1,18 +1,9 @@
 import cv2
 import numpy as np
-from collections import deque
 import imutils
 import serial
 from time import sleep
-from enum import Enum
 import sys
-
-
-class Direction(Enum):
-    forward = 1
-    left = 2
-    right = 3
-    backward = 4
 
 class Camera():
     def __init__(self):
@@ -75,8 +66,6 @@ class Camera():
         return center
 
 
-
-
 class Wheels():
     def __init__(self, ser, names):
         self.ser = ser
@@ -94,15 +83,15 @@ class Wheels():
         message = "BACKWARDS:{0}"
         self.ser.write((message.format(speed)).encode())
 
-    def left(self, speed):
-        message = "LEFT:{0}"
-        self.ser.write((message.format(speed)).encode())
+    def left(self, speed, degrees):
+        message = "LEFT:{0}:{1}"
+        self.ser.write((message.format(speed, degrees)).encode())
 
-    def right(self, speed):
-        message = "RIGHT:{0}"
-        self.ser.write((message.format(speed)).encode())
+    def right(self, speed, degrees):
+        message = "RIGHT:{0}: {1}"
+        self.ser.write((message.format(speed, degrees)).encode())
 
-    def forward_tiles(self, spaces):
+    def forward_tiles(self, spaces, degrees):
         count = 0
         previous = api.cs.get("centre")
         colour = 1 if previous <= 500 else 0
@@ -320,6 +309,9 @@ class API():
 
     def alert_leds(self):
         message = "L:"
+        self.ser.write(message.encode())
+
+    def send_message(self, message):
         self.ser.write(message.encode())
 
 

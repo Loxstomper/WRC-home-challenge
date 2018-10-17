@@ -295,13 +295,13 @@ void move_backwards(int speed)
 
 // for turn left and right functions maybe get the intial average just in case one is outlier
 
-void turn_left(int speed)
+void turn_left(int speed, float degrees)
 {
     Serial.println("Turning Left");
 
     float current_angle = get_angle();
     Serial.println(current_angle);
-    float desired_angle = current_angle - 90.0; //turning left is negative
+    float desired_angle = current_angle - degrees; //turning left is negative
     Serial.println(desired_angle);
 
     if (desired_angle < 0)
@@ -325,12 +325,12 @@ void turn_left(int speed)
     set_motor("right", 0, 0, 0);
 }
 
-void turn_right(int speed)
+void turn_right(int speed, float degrees)
 {
     Serial.println("Turning Right");
     
     float current_angle = get_angle();
-    float desired_angle = current_angle + 90.0; //turning left is negative
+    float desired_angle = current_angle + degrees; //turning left is negative
 
     if (desired_angle > 360.0 )
     {
@@ -634,8 +634,6 @@ void loop()
 
         get_args();
 
-
-
         if ((strcmp("GET", tokens[0])) == 0)
         {
             if ((strcmp("US", tokens[1])) == 0)
@@ -666,11 +664,11 @@ void loop()
         }
         else if ((strcmp("LEFT", tokens[0])) == 0)
         {
-            turn_left(atoi(tokens[1]));
+            turn_left(atoi(tokens[1]), atoi(tokens[2]));
         }
         else if ((strcmp("RIGHT", tokens[0])) == 0)
         {
-            turn_right(atoi(tokens[1]));
+            turn_right(atoi(tokens[1]), atoi(tokens[2]));
         }
         // STOP:ALL:
         else if ((strcmp("STOP", tokens[0])) == 0)
