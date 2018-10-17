@@ -217,6 +217,17 @@ int get_button()
     return 1;
 }
 
+void set_leds(int red, int green, int blue)
+{
+
+	for (int i = 0; i < NUM_LEDS; i ++)
+	{
+		leds[j] = CRGB(red, green, blue);
+	}
+
+	FastLED.show();
+}
+
 void compassSetup()
 {
     mag.begin();
@@ -726,8 +737,10 @@ void loop()
         {
             test();
         }
-        
-        
+	else if((strcmp("LED", tokens[0])) == 0)
+	{
+	   set_led(atoi(tokens[1]), atoi(tokens[2]), atoi(tokens[3]));
+	}
     }
 
     //   Serial.println("US");
