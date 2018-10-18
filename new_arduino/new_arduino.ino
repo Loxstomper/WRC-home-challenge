@@ -219,7 +219,17 @@ int get_button()
 
 void compassSetup()
 {
-    mag.begin();
+  Serial.println("Setting up compass");
+  /* Initialise the sensor */
+  if(!mag.begin())
+  {
+    /* There was a problem detecting the HMC5883 ... check your connections */
+    Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
+    while(1);
+  }
+
+  Serial.println("Finished");
+  
 }
 
 float get_angle()
@@ -247,7 +257,7 @@ float get_angle()
 /* sets motor speed and a/b pins */
 void set_motor(char* name, int a_val, int b_val, int val)
 {
-    //Serial.print(name);
+    //.print(name);
     //Serial.print(a_val);
     //Serial.print(b_val);
     //Serial.print(speed);

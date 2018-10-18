@@ -120,3 +120,6 @@ def pick1():
             print("CANT FIND TURNING LEFT")
             api.stop()
             api.send_message("SET:M:left:1:0:150")
+
+
+
