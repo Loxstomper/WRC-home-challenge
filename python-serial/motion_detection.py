@@ -38,7 +38,8 @@ def alert(frames, api, bot, chat_id):
 def motion_detection(min_area, api, bot, chat_id):
 	global is_armed
 	# webcam
-	vs = VideoStream(src=0).start()
+	# vs = VideoStream(src=0).start()
+        vs = cv2.VideoCapture(0)
 	time.sleep(2.0)
 
 	is_alerted = False
