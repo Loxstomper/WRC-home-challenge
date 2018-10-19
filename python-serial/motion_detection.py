@@ -8,6 +8,7 @@ import API
 from time import sleep
 from telegram.ext import Updater, CommandHandler
 import telegram
+import subprocess
 
 
 is_armed = False
@@ -17,6 +18,8 @@ def alert(frames, api, bot, chat_id):
     # api.alert_leds()
     message = "Alert: " + now
     print(message)
+
+    subprocess.call(["ffplay", "-nodisp", "-autoexit", "./sounds/horn.wav"])
 
     try:
         bot.send_message(chat_id=chat_id, text=message)
