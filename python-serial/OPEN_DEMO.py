@@ -20,6 +20,9 @@ def pick_demo():
     message = "DEMO:"
     ser.write(message.encode())
     print(message.encode())
+    GPIO.output(7, GPIO.HIGH)
+    sleep(1)
+    GPIO.output(7, GPIO.LOW)
 
 def security_demo():
     print("SECURITY DEMO")
@@ -86,6 +89,9 @@ def main():
 
     for pin in pins:
         GPIO.setup(pins[pin], GPIO.IN)
+
+    GPIO.setup(7, GPIO.OUT, initial=GPIO.LOW)
+
 
     colours["menu"]()
 
