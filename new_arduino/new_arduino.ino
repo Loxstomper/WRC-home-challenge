@@ -222,7 +222,7 @@ void set_leds(int red, int green, int blue)
 
 	for (int i = 0; i < NUM_LEDS; i ++)
 	{
-		leds[j] = CRGB(red, green, blue);
+		leds[i] = CRGB(red, green, blue);
 	}
 
 	FastLED.show();
@@ -305,6 +305,92 @@ void move_backwards(int speed)
     set_motor("left", 0, 1, speed);
     // right motor is flipped
     set_motor("right", 1, 0, speed);
+}
+
+void backward_tiles(int spaces)
+{
+    int count = 0;
+    int prev_color = get_cs("centre");
+    int color = 0;
+    int new_color = 0;
+    int value = 0;
+
+    if(prev_color <= 500)
+    {
+        color = 1;
+    }
+    else
+    {
+        color = 0;
+    }
+
+    move_backwards(100);
+    
+    while(spaces>count)
+    {
+        value = get_cs("centre");
+        if(value <= 500)
+        {
+            new_color = 1;
+        }
+        else
+        {
+            new_color = 0;
+        }
+
+        if(new_color != color)
+        {
+            count++;
+            color = new_color;
+        }
+
+        delay(100);
+    }
+
+    stop_all_motors();
+}
+
+void forward_tiles(int spaces)
+{
+    int count = 0;
+    int prev_color = get_cs("centre");
+    int color = 0;
+    int new_color = 0;
+    int value = 0;
+
+    if(prev_color <= 500)
+    {
+        color = 1;
+    }
+    else
+    {
+        color = 0;
+    }
+
+    move_forward(100);
+    
+    while(spaces>count)
+    {
+        value = get_cs("centre");
+        if(value <= 500)
+        {
+            new_color = 1;
+        }
+        else
+        {
+            new_color = 0;
+        }
+
+        if(new_color != color)
+        {
+            count++;
+            color = new_color;
+        }
+
+        delay(100);
+    }
+
+    stop_all_motors();
 }
 
 // for turn left and right functions maybe get the intial average just in case one is outlier
@@ -438,20 +524,21 @@ void drop_arm()
 
     //delay(500);
     set_motor("second", 0, 1, 100);
-    delay(1000);
+    delay(825);
     set_motor("second", 0, 0, 0);
 }
 
 void open_claw()
 {
-    set_motor("claw", 1, 0, 200);
+    set_motor("claw", 0, 1, 200);
     delay(1000);
     set_motor("claw", 0, 0, 0);
 }
 
 void grab()
 {
-    set_motor("claw", 0, 1, 200);
+    //grabs object
+    set_motor("claw", 1, 0, 200);
     delay(250);
     set_motor("claw", 0, 0, 0);
 
@@ -462,6 +549,20 @@ void grab()
     set_motor("second", 0, 1, 200);
     delay(1000);
     set_motor("second", 0, 0, 0);
+}
+
+void drop_object()
+{
+    //put arm down from grab possition
+    set_motor("first", 1, 0, 255);
+    delay(1500);
+    set_motor("first", 0, 0, 0);
+
+    set_motor("second", 1, 0, 200);
+    delay(1000);
+    set_motor("second", 0, 0, 0);
+
+    open_claw();
 }
 
 void alarm_leds()
@@ -572,6 +673,41 @@ void collision()
             turn_right(150, 90);
         }
     }
+}
+
+void demo()
+{
+  bool found = false;
+  float us_sensor;
+  int cs_sensor;
+  
+//  move_forward(100);
+//  
+//  while(!found)
+//  {
+//    poll_us();
+//    us_sensor = get_us("centre");
+//    if(us_sensor < 15)
+//    {
+//      found = true;
+//    }
+//  }
+//  
+//  stop_all_motors();
+//  found = false;
+//
+//  backward_tiles(4);
+//  drop_arm();
+//  open_claw();
+//  forward_tiles(1);
+//  grab();
+//
+//  turn_right(100, 180);
+
+    forward_tiles(5);
+    backward_tiles(3);
+    drop_object();
+  
 }
 
 
@@ -725,7 +861,14 @@ void loop()
         }
         else if ((strcmp("DROP", tokens[0])) == 0)
         {
-            drop_arm();
+            if((strcmp("OBJECT", tokens[1])) == 0)
+            {
+                drop_object();
+            }
+            else if((strcmp("ARM", tokens[1])) == 0)
+            {
+                drop_arm();
+            }
         }
         else if ((strcmp("OPEN", tokens[0])) == 0)
         {
@@ -747,10 +890,21 @@ void loop()
         {
             test();
         }
-	else if((strcmp("LED", tokens[0])) == 0)
-	{
-	   set_led(atoi(tokens[1]), atoi(tokens[2]), atoi(tokens[3]));
-	}
+      	else if((strcmp("LED", tokens[0])) == 0)
+      	{
+      	   set_leds(atoi(tokens[1]), atoi(tokens[2]), atoi(tokens[3]));
+      	}
+        else if((strcmp("DROP", tokens[0])) == 0)
+        {
+            if((strcmp("OBJECT", tokens[1])) == 0)
+            {
+                drop_object();
+            }
+        }
+        else if((strcmp("DEMO", tokens[0])) == 0)
+        {
+           demo();
+        }
     }
 
     //   Serial.println("US");

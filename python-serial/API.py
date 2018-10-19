@@ -160,7 +160,7 @@ class Wheels():
 
             sleep(0.1)
 
-        self.stop()
+        self.stop() 
 
     def diagnose(self):
         print("Forward")
