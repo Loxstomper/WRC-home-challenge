@@ -1,9 +1,10 @@
 import RPi.GPIO as GPIO
 import serial
+import motion_detection
 from time import sleep
 
 ser = serial.Serial("/dev/ttyACM0", timeout=1)
-ser = None
+#ser = None
 
 def menu_colour():
     global ser
@@ -13,6 +14,14 @@ def menu_colour():
     message = "LED:0:255:0:"
     ser.write(message.encode())
 
+def pick_demo():
+    print("PICK DEMO")
+    sleep(5)
+
+def security_demo():
+    print("SECURITY DEMO")
+    motion_detection.start_program()
+    sleep(5)
 
 def one_colour():
     global ser
@@ -51,14 +60,13 @@ def four_colour():
 
 
 def main():
-    #pins = {"one": 3, "two":5, "three":7, "four":11}
-    pins = {"one": 3}
+    pins = {"one": 3, "two":5}
 
     # pin states
-    states = {"one":0, "two":0, "three":0, "four":0}
+    states = {"one":0, "two":0}
 
     # function pointers
-    programs = {"one":a.start}
+    programs = {"one":pick_demo, "two":security_demo}
 
     # program colours
     colours = {"menu":menu_colour, "one":one_colour, "two":two_colour, "three":three_colour, "four":four_colour}
@@ -71,6 +79,7 @@ def main():
     colours["menu"]()
 
     while True:
+        #print(states)
         for pin in pins:
             # button press is a 0 not a 1
             states[pin] = not GPIO.input(pins[pin])
@@ -78,8 +87,8 @@ def main():
             if states[pin]:
                 colours[pin]()
                 programs[pin]()
-                colours["menu"]()
-                sleep(1)
+                #colours["menu"]()
+                #sleep(1)
 
 
 if __name__ == "__main__":

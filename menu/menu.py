@@ -12,7 +12,7 @@ def menu_colour():
 
     # green
     message = "LED:0:255:0:"
-    ser.write(message.encode())
+    #ser.write(message.encode())
 
 
 def one_colour():
@@ -21,7 +21,7 @@ def one_colour():
 
     # red
     message = "LED:255:0:0:"
-    ser.write(message.encode())
+    #ser.write(message.encode())
 
 
 def two_colour():
@@ -30,7 +30,7 @@ def two_colour():
 
     # blue
     message = "LED:0:0:255:"
-    ser.write(message.encode())
+    #ser.write(message.encode())
 
 
 def three_colour():
@@ -39,7 +39,7 @@ def three_colour():
 
     # purple
     message = "LED:255:0:255:"
-    ser.write(message.encode())
+    #ser.write(message.encode())
 
 
 def four_colour():
@@ -48,7 +48,7 @@ def four_colour():
 
     # yellow
     message = "LED:255:255:0:"
-    ser.write(message.encode())
+    #ser.write(message.encode())
 
 
 def main():
@@ -81,6 +81,7 @@ def main():
                 programs[pin]()
                 colours["menu"]()
                 sleep(1)
+        print(states)
 
 
 if __name__ == "__main__":
