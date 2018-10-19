@@ -23,6 +23,8 @@ def alert(frames, api, bot, chat_id):
     except:
         print("failed to send to user")
 
+    sleep(5)
+
     for frame in frames:
         # save image
         file_path = "./images/" + now + ".jpg"
