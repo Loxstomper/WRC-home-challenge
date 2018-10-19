@@ -3,8 +3,8 @@ import serial
 import motion_detection
 from time import sleep
 
-ser = serial.Serial("/dev/ttyACM0", timeout=1)
-#ser = None
+#ser = serial.Serial("/dev/ttyACM0", timeout=1)
+ser = None
 
 def menu_colour():
     global ser
@@ -73,7 +73,7 @@ def clear_colour():
 
 def main():
     # clear LED
-    clear_colour()
+    # clear_colour()
     pins = {"one": 3, "two":5}
 
     # pin states
@@ -93,10 +93,10 @@ def main():
     GPIO.setup(7, GPIO.OUT, initial=GPIO.LOW)
 
 
-    colours["menu"]()
+    #colours["menu"]()
 
     while True:
-        #print(states)
+        print(states)
         for pin in pins:
             # button press is a 0 not a 1
             states[pin] = not GPIO.input(pins[pin])
