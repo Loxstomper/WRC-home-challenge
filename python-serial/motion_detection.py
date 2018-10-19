@@ -26,18 +26,16 @@ def alert(frames, api, bot, chat_id):
     except:
         print("failed to send to user")
 
-    sleep(5)
-
     for frame in frames:
         # save image
         file_path = "./images/" + now + ".jpg"
         cv2.imwrite(file_path, frame)
         # send image
-        try:
-            bot.send_photo(chat_id=chat_id, photo=open(file_path, 'rb'))
-        except:
-            print("failed to send image")
-        sleep(1.5)
+        # try:
+        #     bot.send_photo(chat_id=chat_id, photo=open(file_path, 'rb'))
+        # except:
+        #     print("failed to send image")
+        # sleep(1.5)
 
 
 def motion_detection(min_area, api, bot, chat_id):
@@ -141,15 +139,15 @@ def motion_detection(min_area, api, bot, chat_id):
         #   (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
 
         # show the frame and
-        cv2.imshow("Security Feed", frame)
-        cv2.imshow("Thresh", thresh)
-        cv2.imshow("Frame Delta", frameDelta)
+        # cv2.imshow("Security Feed", frame)
+        # cv2.imshow("Thresh", thresh)
+        # cv2.imshow("Frame Delta", frameDelta)
 
-        key = cv2.waitKey(1) & 0xFF
+        # key = cv2.waitKey(1) & 0xFF
 
-        # if the `q` key is pressed, break from the lop
-        if key == ord("q"):
-            break
+        # # if the `q` key is pressed, break from the lop
+        # if key == ord("q"):
+        #     break
 
     # cleanup the camera and close any open windows
     vs.stop()
