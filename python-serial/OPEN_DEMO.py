@@ -11,15 +11,15 @@ def menu_colour():
     print("MENU COLOUR")
 
     # green
-    message = "LED:0:255:0:"
-    ser.write(message.encode())
+    # message = "LED:0:255:0:"
+    # ser.write(message.encode())
 
 def pick_demo():
     global ser
     print("PICK DEMO")
     message = "DEMO:"
-    ser.write(message.encode())
-    print(message.encode())
+    # ser.write(message.encode())
+    # print(message.encode())
     GPIO.output(7, GPIO.HIGH)
     sleep(1)
     GPIO.output(7, GPIO.LOW)
@@ -35,7 +35,7 @@ def one_colour():
 
     # red
     message = "LED:255:0:0:"
-    ser.write(message.encode())
+    # ser.write(message.encode())
 
 
 def two_colour():
@@ -44,7 +44,7 @@ def two_colour():
 
     # blue
     message = "LED:0:0:255:"
-    ser.write(message.encode())
+    # ser.write(message.encode())
 
 
 def three_colour():
@@ -53,7 +53,7 @@ def three_colour():
 
     # purple
     message = "LED:255:0:255:"
-    ser.write(message.encode())
+    # ser.write(message.encode())
 
 
 def four_colour():
@@ -62,13 +62,13 @@ def four_colour():
 
     # yellow
     message = "LED:255:255:0:"
-    ser.write(message.encode())
+    # ser.write(message.encode())
 
 def clear_colour():
     global ser
 
     message = "LED:0:0:0:"
-    ser.write(message.encode())
+    # ser.write(message.encode())
 
 
 def main():

@@ -22,7 +22,8 @@ def alert(frames, api, bot, chat_id):
     subprocess.call(["ffplay", "-nodisp", "-autoexit", "./sounds/horn.wav"])
 
     try:
-        bot.send_message(chat_id=chat_id, text=message)
+        pass
+        # bot.send_message(chat_id=chat_id, text=message)
     except:
         print("failed to send to user")
 
@@ -157,8 +158,9 @@ def motion_detection(min_area, api, bot, chat_id):
 
 # telegram bot
 def start(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
-    print(update.message.chat_id)
+    pass
+    # bot.send_message(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
+    # print(update.message.chat_id)
 
 def send_txt(bot, chat_id, text):
     bot.send_message(chat_id=chat_id, text=text)
