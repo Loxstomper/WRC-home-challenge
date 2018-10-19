@@ -6,6 +6,8 @@ from time import sleep
 #ser = serial.Serial("/dev/ttyACM0", timeout=1)
 ser = None
 
+pick_pin = 7
+
 def menu_colour():
     global ser
     print("MENU COLOUR")
@@ -16,13 +18,14 @@ def menu_colour():
 
 def pick_demo():
     global ser
+    global pick_pin
     print("PICK DEMO")
     message = "DEMO:"
     # ser.write(message.encode())
     # print(message.encode())
-    GPIO.output(7, GPIO.HIGH)
+    GPIO.output(pick_pin, GPIO.HIGH)
     sleep(1)
-    GPIO.output(7, GPIO.LOW)
+    GPIO.output(pick_pin, GPIO.LOW)
 
 def security_demo():
     print("SECURITY DEMO")
@@ -72,6 +75,7 @@ def clear_colour():
 
 
 def main():
+    global pick_pin
     # clear LED
     # clear_colour()
     pins = {"one": 3, "two":5}
@@ -90,7 +94,7 @@ def main():
     for pin in pins:
         GPIO.setup(pins[pin], GPIO.IN)
 
-    GPIO.setup(7, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(pick_pin, GPIO.OUT, initial=GPIO.LOW)
 
 
     #colours["menu"]()

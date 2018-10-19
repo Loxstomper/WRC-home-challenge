@@ -9,17 +9,24 @@ from time import sleep
 from telegram.ext import Updater, CommandHandler
 import telegram
 import subprocess
+import RPi.GPIO as GPIO
 
 
 is_armed = False
+arduino_pin = 32 
 
 def alert(frames, api, bot, chat_id):
+    global arduino_pin
+
     now = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     # api.alert_leds()
     message = "Alert: " + now
-    print(message)
+    # print(message)
 
     subprocess.call(["ffplay", "-nodisp", "-autoexit", "./sounds/horn.wav"])
+    GPIO.output(arduino_pin, GPIO.HIGH)
+    sleep(2)
+    GPIO.output(arduino_pin, GPIO.LOW)
 
     try:
         pass
@@ -189,6 +196,9 @@ def help(bot, update):
 
 def start_program():
     global is_armed
+    global arduino_pin
+
+    GPIO.setup(arduino_pin, GPIO.OUT, initial=GPIO.LOW)
 
     lochie_chat_id = 487912709
     bot_token = "629389428:AAGeiLSafnaVEwTfqA67TNpNcucnPsE2HTo"
