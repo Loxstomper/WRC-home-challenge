@@ -147,7 +147,8 @@ def motion_detection(min_area, api, bot, chat_id):
             break
 
     # cleanup the camera and close any open windows
-    vs.stop() if args.get("video", None) is None else vs.release()
+    vs.stop()
+    # vs.stop() if args.get("video", None) is None else vs.release()
     cv2.destroyAllWindows()
 
 
