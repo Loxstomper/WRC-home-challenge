@@ -14,7 +14,7 @@ is_armed = False
 
 def alert(frames, api, bot, chat_id):
     now = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-    api.alert_leds()
+    # api.alert_leds()
     message = "Alert: " + now
     print(message)
 
@@ -38,8 +38,8 @@ def alert(frames, api, bot, chat_id):
 def motion_detection(min_area, api, bot, chat_id):
     global is_armed
     # webcam
-    # vs = VideoStream(src=0).start()
-    vs = cv2.VideoCapture(0)
+    vs = VideoStream(src=0).start()
+    # vs = cv2.VideoCapture(0)
     time.sleep(2.0)
 
     is_alerted = False
@@ -202,16 +202,14 @@ def start_program():
     # bot.send_photo(chat_id=lochie_chat_id, photo=open('TEST.jpg', 'rb'))
     # quit()
 
-    api = API.API("/dev/ttyACM0")
+    # api = API.API("/dev/ttyACM0")
     # api.alert_leds()
-    # api = None
+    api = None
+    is_armed = True
     motion_detection(500, api, bot, lochie_chat_id)
 
 
-    is_armed = True
 
 
 if __name__ == "__main__":
     start_program()
-
-
