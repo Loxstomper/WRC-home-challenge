@@ -15,8 +15,11 @@ def menu_colour():
     ser.write(message.encode())
 
 def pick_demo():
+    global ser
     print("PICK DEMO")
-    sleep(5)
+    message = "DEMO:"
+    ser.write(message.encode())
+    print(message.encode())
 
 def security_demo():
     print("SECURITY DEMO")
@@ -58,8 +61,16 @@ def four_colour():
     message = "LED:255:255:0:"
     ser.write(message.encode())
 
+def clear_colour():
+    global ser
+
+    message = "LED:0:0:0:"
+    ser.write(message.encode())
+
 
 def main():
+    # clear LED
+    clear_colour()
     pins = {"one": 3, "two":5}
 
     # pin states
@@ -87,8 +98,8 @@ def main():
             if states[pin]:
                 colours[pin]()
                 programs[pin]()
-                #colours["menu"]()
-                #sleep(1)
+                colours["menu"]()
+                sleep(1)
 
 
 if __name__ == "__main__":
