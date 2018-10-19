@@ -328,7 +328,7 @@ class API():
         self.claw.diagnose()
 
     def alert_leds(self):
-        message = "L:"
+        message = "ALARM:"
         self.ser.write(message.encode())
 
     def collision(self):

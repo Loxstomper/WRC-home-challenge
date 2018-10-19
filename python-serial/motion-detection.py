@@ -14,7 +14,7 @@ is_armed = False
 
 def alert(frames, api, bot, chat_id):
 	now = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-	# api.alert_leds()
+	api.alert_leds()
 	message = "Alert: " + now
 	print(message)
 
@@ -180,29 +180,37 @@ def help(bot, update):
 	message = "Once armed if motion is detected an alert will be sent via message including pictures with time stamps and the LEDs will light up too.\n /arm arms Homie Bot\n/disarm disarms Homie Bot\n/help this menu"
 	bot.send_message(chat_id=update.message.chat_id, text=message)
 
+def start_program():
+    global is_armed
+
+    lochie_chat_id = 487912709
+    bot_token = "629389428:AAGeiLSafnaVEwTfqA67TNpNcucnPsE2HTo"
+    updater = Updater(token=bot_token)
+    dispatcher = updater.dispatcher
+    start_handler = CommandHandler('start', start)
+
+    dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(CommandHandler('arm', arm))
+    dispatcher.add_handler(CommandHandler('disarm', disarm))
+    dispatcher.add_handler(CommandHandler('help', help))
+    updater.start_polling()
+
+    bot = telegram.Bot(bot_token)
+    send_txt(bot, lochie_chat_id, "Homie Bot, at your service!\ntype /help for information")
+
+    # bot.send_photo(chat_id=lochie_chat_id, photo=open('TEST.jpg', 'rb'))
+    # quit()
+
+    api = API.API("/dev/ttyACM0")
+    # api.alert_leds()
+    # api = None
+    motion_detection(500, api, bot, lochie_chat_id)
+
+
+    is_armed = True
 
 
 if __name__ == "__main__":
-	lochie_chat_id = 487912709
-	bot_token = "629389428:AAGeiLSafnaVEwTfqA67TNpNcucnPsE2HTo"
-	updater = Updater(token=bot_token)
-	dispatcher = updater.dispatcher
-	start_handler = CommandHandler('start', start)
-
-	dispatcher.add_handler(start_handler)
-	dispatcher.add_handler(CommandHandler('arm', arm))
-	dispatcher.add_handler(CommandHandler('disarm', disarm))
-	dispatcher.add_handler(CommandHandler('help', help))
-	updater.start_polling()
-
-	bot = telegram.Bot(bot_token)
-	send_txt(bot, lochie_chat_id, "Homie Bot, at your service!\ntype /help for information")
-
-	# bot.send_photo(chat_id=lochie_chat_id, photo=open('TEST.jpg', 'rb'))
-	# quit()
-
-	# api = API.API("/dev/ttyACM0")
-	api = None
-	motion_detection(500, api, bot, lochie_chat_id)
+    start_program()
 
 
