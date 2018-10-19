@@ -681,28 +681,28 @@ void demo()
   float us_sensor;
   int cs_sensor;
   
-//  move_forward(100);
-//  
-//  while(!found)
-//  {
-//    poll_us();
-//    us_sensor = get_us("centre");
-//    if(us_sensor < 15)
-//    {
-//      found = true;
-//    }
-//  }
-//  
-//  stop_all_motors();
-//  found = false;
-//
-//  backward_tiles(4);
-//  drop_arm();
-//  open_claw();
-//  forward_tiles(1);
-//  grab();
-//
-//  turn_right(100, 180);
+  move_forward(100);
+  
+  while(!found)
+  {
+    poll_us();
+    us_sensor = get_us("centre");
+    if(us_sensor < 15)
+    {
+      found = true;
+    }
+  }
+  
+  stop_all_motors();
+  found = false;
+
+  backward_tiles(4);
+  drop_arm();
+  open_claw();
+  forward_tiles(1);
+  grab();
+
+  turn_right(100, 180);
 
     forward_tiles(5);
     backward_tiles(3);
