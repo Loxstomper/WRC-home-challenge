@@ -11,9 +11,8 @@ import telegram
 import subprocess
 import RPi.GPIO as GPIO
 
-
 is_armed = False
-arduino_pin = 32 
+arduino_pin = 11 
 
 def alert(frames, api, bot, chat_id):
     global arduino_pin
@@ -223,8 +222,6 @@ def start_program():
     api = None
     is_armed = True
     motion_detection(500, api, bot, lochie_chat_id)
-
-
 
 
 if __name__ == "__main__":
