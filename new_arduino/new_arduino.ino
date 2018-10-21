@@ -8,7 +8,7 @@
 #define NUMBER_US 3 
 #define NUMBER_CS 3
 #define NUMBER_MOTORS 5
-#define NUM_LEDS 33
+#define NUM_LEDS 4 //33
 #define DATA_PIN 8
 
 // globals

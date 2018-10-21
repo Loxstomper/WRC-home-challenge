@@ -1,19 +1,36 @@
 import RPi.GPIO as GPIO
 import serial
-import a
+import motion_detection
 from time import sleep
 
 #ser = serial.Serial("/dev/ttyACM0", timeout=1)
 ser = None
+
+pick_pin = 7
 
 def menu_colour():
     global ser
     print("MENU COLOUR")
 
     # green
-    message = "LED:0:255:0:"
-    #ser.write(message.encode())
+    # message = "LED:0:255:0:"
+    # ser.write(message.encode())
 
+def pick_demo():
+    global ser
+    global pick_pin
+    print("PICK DEMO")
+    message = "DEMO:"
+    # ser.write(message.encode())
+    # print(message.encode())
+    GPIO.output(pick_pin, GPIO.HIGH)
+    sleep(1)
+    GPIO.output(pick_pin, GPIO.LOW)
+
+def security_demo():
+    print("SECURITY DEMO")
+    motion_detection.start_program()
+    sleep(5)
 
 def one_colour():
     global ser
@@ -21,7 +38,7 @@ def one_colour():
 
     # red
     message = "LED:255:0:0:"
-    #ser.write(message.encode())
+    # ser.write(message.encode())
 
 
 def two_colour():
@@ -30,7 +47,7 @@ def two_colour():
 
     # blue
     message = "LED:0:0:255:"
-    #ser.write(message.encode())
+    # ser.write(message.encode())
 
 
 def three_colour():
@@ -39,7 +56,7 @@ def three_colour():
 
     # purple
     message = "LED:255:0:255:"
-    #ser.write(message.encode())
+    # ser.write(message.encode())
 
 
 def four_colour():
@@ -48,18 +65,26 @@ def four_colour():
 
     # yellow
     message = "LED:255:255:0:"
-    #ser.write(message.encode())
+    # ser.write(message.encode())
+
+def clear_colour():
+    global ser
+
+    message = "LED:0:0:0:"
+    # ser.write(message.encode())
 
 
 def main():
-    #pins = {"one": 3, "two":5, "three":7, "four":11}
-    pins = {"one": 3}
+    global pick_pin
+    # clear LED
+    # clear_colour()
+    pins = {"one": 3, "two":5}
 
     # pin states
-    states = {"one":0, "two":0, "three":0, "four":0}
+    states = {"one":0, "two":0}
 
     # function pointers
-    programs = {"one":a.start}
+    programs = {"one":pick_demo, "two":security_demo}
 
     # program colours
     colours = {"menu":menu_colour, "one":one_colour, "two":two_colour, "three":three_colour, "four":four_colour}
@@ -69,9 +94,13 @@ def main():
     for pin in pins:
         GPIO.setup(pins[pin], GPIO.IN)
 
-    colours["menu"]()
+    GPIO.setup(pick_pin, GPIO.OUT, initial=GPIO.LOW)
+
+
+    #colours["menu"]()
 
     while True:
+        print(states)
         for pin in pins:
             # button press is a 0 not a 1
             states[pin] = not GPIO.input(pins[pin])
@@ -81,7 +110,6 @@ def main():
                 programs[pin]()
                 colours["menu"]()
                 sleep(1)
-        print(states)
 
 
 if __name__ == "__main__":
