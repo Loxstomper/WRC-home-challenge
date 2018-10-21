@@ -679,7 +679,6 @@ void demo()
 {
   bool found = false;
   float us_sensor;
-  int cs_sensor;
   
   move_forward(100);
   
@@ -702,14 +701,35 @@ void demo()
   forward_tiles(1);
   grab();
 
-  turn_right(100, 180);
+  turn_left(100, 180);
 
-    forward_tiles(5);
-    backward_tiles(3);
-    drop_object();
+  while(!found)
+  {
+    poll_us();
+    us_sensor = get_us("centre");
+    if(us_sensor < 15)
+    {
+      found = true;
+    }
+  }
+
+  backward_tiles(5);
+  drop_object();
+
+  
   
 }
 
+void object_detected()
+{
+    set_motor("right", 0, 1, 255);
+    delay(1000);
+    stop_all_motors();
+
+    move_forward(255);
+    delay(500);
+    stop_all_motors();
+}
 
 void setup()
 {
@@ -761,6 +781,8 @@ void get_args()
     /*     Serial.println(tokens[i]); */
     /* } */
 }
+
+
 
 
 void loop()
@@ -905,6 +927,11 @@ void loop()
         {
            demo();
         }
+        else if((strcmp("DETECTED", tokens[0])) == 0)
+        {
+            object_detected();
+        }
+        
     }
 
     //   Serial.println("US");
